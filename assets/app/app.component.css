@@ -1,117 +1,22 @@
-/* Navigation */
-.navbar {
-    padding: 0;
-}
 
-/** Logo */
-.logo {
-    max-width: 4rem;
-    min-width: 4rem;
-    width: 4rem;
-    height: 4rem;
-    background-size: 4rem!important;
-}
+.main-content {    
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+  
+  .content {
+    display: flex;
+    /*
+    *
+    *PROBLEMMMMM PADDING
+    *
+    **/
 
-/*** Logo elements */
-.logo__img {    
+    padding: 15rem;
+  }
+  
+  .main .article {
     width: 100%;
     height: 100%;
-}
-
-
-/**** Logo modifications */
-.logo__img--white {    
-    background-image: url("/img/logo/peeker-white-med.png");
-}
-
-.logo__img--orange {    
-    background-image: url("/img/logo/peeker-orange-med.png");
-}
- /*
-.logo__img--black {    
-    background-image: url("/img/logo/peeker-black-med.png");
-}*/
- 
- .logo__img--grayblue {    
-    background-image: url("/img/logo/peeker-grayblue-med.png");
-} 
-
- .logo__img--glitter {    
-    background-image: url("/img/logo/peeker-glitter-med.png");
-}
-
-.logo__img--inverted-white {    
-    background: url("/img/logo/peeker-inverted-yellow-med.png");
-}
-
-.logo__img--inverted-orange {    
-    background-image: url("/img/logo/peeker-inverted-orange-med.png");
-}
- /*
-.logo__img--inverted-black {    
-    background-image: url("/img/logo/peeker-inverted-black-med.png");
-}*/
- 
-.logo__img--inverted-grayblue {    
-    background-image: url("/img/logo/peeker-inverted-grayblue-med.png");
-} 
-
-.logo__img--inverted-glitter {    
-    background-image: url("/img/logo/peeker-inverted-glitter-med.png");
-}
-
-.logo__img--inverted-dark {    
-    background-image: url("/img/logo/peeker-inverted-dark-med.png");
-}
-
-/* Background colors */
-
-.bg--orange {
-    background-color: #ef8354
-}
-
-.bg--white {
-    background-color: #ffffff
-}
-
-.bg--black {
-    background-color: #000000
-}
-
-.bg--grayblue {
-    background-color: #4f5d75
-}
-
-.bg--glitter {
-    background-color: #e7ecef
-}
-
-.bg--dark {
-    background-color: #272932
-}
-
-/* Colors */
-
-.color--orange {
-    color: #ef8354
-}
-
-.color--white {
-    color: #ffffff
-}
-
-.color--black {
-    color: #000000
-}
-
-.color--grayblue {
-    color: #4f5d75
-}
-
-.color--glitter {
-    color: #e7ecef
-}
-
-.color--dark {
-    color: #272932
-}
+  }

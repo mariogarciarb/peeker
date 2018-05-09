@@ -1,0 +1,34 @@
+.localVideo {
+    height: 8rem;
+    width: auto;
+
+    position: absolute;
+    bottom: 0;
+    right: 0;
+    z-index: 10;
+    align-self: center;
+    justify-content: center;
+}
+
+.remoteVideo {
+    height: 28rem;
+    
+    position: absolute;
+    z-index: 9;
+    align-self: center;
+    justify-content: center;
+}
+
+
+
+  /*
+    Media queries
+  */
+  @media screen and (max-width: 1400px) {
+    .remoteVideo {
+        /* background-color:blue!important; */
+    }
+    .localVideo {
+        /* background-color:green!important; */
+    }
+  }
