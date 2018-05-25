@@ -1,0 +1,5 @@
+.list-group-item small {
+    padding-top: 0.3rem;
+    border-top: 1px solid gray;
+    color: gray;
+}

@@ -1,5 +1,11 @@
-<div class="row align-items-end justify-content-center">
-  <video id="remoteVideo" class="remoteVideo col-lg-8" autoplay></video>
-  <video id="localVideo" class="localVideo col-lg-4" muted autoplay ></video>
-</div>
-
+<section class="main-content col-xl-9 row no-gutters">
+  <div class="content container-fluid justify-content-center align-items-center w-100 logo__img--grayblue bg-image">
+    <div class="row align-items-end justify-content-center">
+      <video id="remoteVideo" class="remoteVideo col-lg-8" autoplay></video>
+      <video id="localVideo" class="localVideo col-lg-4" muted autoplay ></video>
+    </div>
+  </div>
+</section>
+  
+<!-- Aside -->
+<app-aside (someEvent)="call($event)"></app-aside>

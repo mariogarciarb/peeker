@@ -1,3 +1,22 @@
+
+.main-content {    
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+  
+.content {
+    display: flex;
+/*
+*
+*PROBLEMMMMM PADDING
+*
+**/
+
+padding: 15rem;
+}
+  
+
 .localVideo {
     height: 8rem;
     width: auto;
@@ -24,11 +43,11 @@
   /*
     Media queries
   */
-  @media screen and (max-width: 1400px) {
+  /* @media screen and (max-width: 1400px) {
     .remoteVideo {
-        /* background-color:blue!important; */
+        
     }
     .localVideo {
-        /* background-color:green!important; */
+        
     }
-  }
+  } */

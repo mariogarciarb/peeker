@@ -1,0 +1,87 @@
+import { User } from "../auth/user.model";
+import { Injectable } from "@angular/core";
+import { Http, Response, Headers } from "@angular/http";
+
+//Observable imports
+import 'rxjs/Rx';
+import { Observable } from "rxjs";
+
+@Injectable()
+export class ContactService{    
+    private domain: string = 'http://192.168.0.13:3000';//192.168.137.1
+    private contacts: User[] = [];3
+    private fetchedUsers: User[] = [];
+
+    constructor(private http: Http) {}
+
+    addContact(index: number) {
+        const token = this.getToken();
+        var user = this.fetchedUsers[index];
+        this.contacts.push(user);
+        
+        const body = JSON.stringify(user);        
+        const headers = new Headers({
+            'Content-Type': 'application/json'
+        });
+
+        return this.http.post(this.domain + '/contact/' + token, body, {headers: headers})
+            .map((response: Response) => response.json().res).
+            catch((error: Response) => Observable.throw(error.json()));
+
+    }
+
+    getContacts() {
+        //Not headers are needed since we're not sending any data.
+        
+        const token = this.getToken();
+        return this.http.get(this.domain + '/contact/' + token)
+            .map((response: Response) => {
+                const contacts = response.json().contacts;
+                console.log('----------');
+                console.log(contacts);
+                console.log('----------');
+                let transformedContacts: User[] = [];
+
+                //MongoDB stores users with some attributes that don't match the client User model.
+                for (let contact of contacts) {
+                    transformedContacts.push(new User("", "", contact.username, contact.firstName, contact.secondName))
+                }
+
+                this.contacts = transformedContacts;
+                return transformedContacts;
+            }).
+            catch((error: Response) => Observable.throw(error.json()));
+    }
+
+    deleteContact(user: User) {
+        this.contacts.splice(this.contacts.indexOf(user), 1);
+    }
+
+    searchContacts(username: string) {
+        const body = JSON.stringify({username: username});
+        const token = this.getToken();
+        const headers = new Headers({
+            'Content-Type': 'application/json'
+        });
+
+        return this.http.post(this.domain + '/contact/search' + token, body, {headers: headers})
+            .map((response: Response) => {
+                const users = response.json().users;
+                let transformedUsers: User[] = [];
+
+                //MongoDB stores users with some attributes that don't match the client User model.
+                for (let user of users) {
+                    transformedUsers.push(new User("", "", user.username, user.firstName, user.secondName))
+                }
+
+                this.fetchedUsers = transformedUsers;
+                return transformedUsers;
+            }).
+            catch((error: Response) => Observable.throw(error.json()));
+    }
+
+    getToken() {
+        var token = localStorage.getItem('token');
+        return (token) ? "?token=" + token : '';
+    }
+}

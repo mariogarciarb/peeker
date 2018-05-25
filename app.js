@@ -7,11 +7,12 @@ var bodyParser = require('body-parser');
 var mongoose = require('mongoose');
 
 var appRoutes = require('./routes/app');
-
+var userRoutes = require('./routes/user');
+var contactRoutes = require('./routes/contact');
 var app = express();
 
 //Starting connection with MongoDB
-mongoose.connect('localhost:27017/peeker');
+mongoose.connect('mongodb://localhost:27017/peeker');
 
 
 // view engine setup
@@ -34,11 +35,13 @@ app.use(function (req, res, next) {
 });
 
 app.use('/', appRoutes);
+app.use('/user', userRoutes);
+app.use('/contact', contactRoutes);
 
 // catch 404 and forward to error handler
+//Angular will handle the route in the client side
 app.use(function (req, res, next) {
     return res.render('index');
 });
-
 
 module.exports = app;

@@ -8,8 +8,11 @@ var mongooseUniqueValidator = require('mongoose-unique-validator');
 
 //Creating the user's schema or blueprint
 var schema = new Schema({
-    name: {type: String, required, unique: true},
-    password: {type: String, required },
+    email: {type: String, required: true, unique: true},
+    username: {type: String, required: true, unique: true},
+    password: {type: String, required: true },
+    firstName: {type: String, required: true},
+    secondName: {type: String, required: true},
     friends: [{type: Schema.Types.ObjectId, ref: 'User'}]
 });
 schema.plugin(mongooseUniqueValidator);

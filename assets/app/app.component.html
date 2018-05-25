@@ -1,21 +1,12 @@
+<!-- Navigation -->
 <app-nav></app-nav>
+
+<!-- Main content -->
 <main class="main container-fluid">
-  <article class="article row bg--glitter">
-
-    <!-- Main section -->
-    <section class="main-content col-xl-9 row no-gutters">
-<!-- <Dynamic content depending on the current functionality> -->
-
-      <div class="content container-fluid justify-content-center align-items-center w-100 logo__img--grayblue bg-image">
-        <app-chat></app-chat>
-      </div>
-
-<!-- </Dynamic content depending on the current functionality> -->
-    </section>
-
-    <!-- Aside -->
-    <app-aside></app-aside>
+  <article class="article row bg--glitter justify-content-center align-items-center">
+    <router-outlet></router-outlet>
   </article>
 </main>
 
+<!-- Footer -->
 <app-footer></app-footer>

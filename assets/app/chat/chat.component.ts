@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { Router } from '@angular/router';
 
 @Component({
     selector: 'app-chat',
@@ -6,7 +7,15 @@ import { Component, OnInit } from '@angular/core';
     styleUrls: ['./chat.component.css']
 })
 export class ChatComponent implements OnInit{
-    ngOnInit() {
+
+    constructor(private router: Router) {}
+
+    ngOnInit() {        
+        if (!this.isAuthenticated()) {            
+            this.router.navigateByUrl('/auth');
+            return;
+        }
+        
         initClient();
         this.muteLocalVideo();
     }
@@ -14,5 +23,10 @@ export class ChatComponent implements OnInit{
     muteLocalVideo() {                
         var element = document.getElementById('localVideo');
         element.muted = "muted";
+    }
+
+    isAuthenticated() {
+        console.log(localStorage.getItem('token'));
+        return localStorage.getItem('token');
     }
 }
