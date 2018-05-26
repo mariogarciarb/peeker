@@ -7,12 +7,14 @@ import { NavComponent } from "./nav/nav.component";
 import { AsideComponent } from "./aside/aside.component";
 import { FooterComponent } from "./footer/footer.component";
 import { MainComponent } from "./main/main.component";
-import { routing } from "./app.routing";
 import { ContactsComponent } from './contacts/contacts.component';
 import { AuthenticationComponent } from './auth/authentication.component';
 import { LogoutComponent } from './auth/logout.component';
 import { SigninComponent } from './auth/signin.component';
 import { SignupComponent } from './auth/signup.component';
+import { HomeComponent } from './home/home.component';
+
+import { routing } from "./app.routing";
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { HttpModule } from '@angular/http';
 import { AuthService } from './auth/auth.service';
@@ -28,6 +30,7 @@ import { ContactService } from './contacts/contact.service';
         FooterComponent, 
         MainComponent,
         AuthenticationComponent,
+        HomeComponent,
         LogoutComponent,
         SignupComponent,
         SigninComponent

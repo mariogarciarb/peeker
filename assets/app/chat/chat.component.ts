@@ -1,5 +1,14 @@
+
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
+
+// declare module 'socket.io-client' {
+//     var e: any;
+//     export = e;
+//     }
+    
+//     import '../../../public/js/libs/adapter.js';
+//     import '../../../public/js/libs/main.js';
 
 @Component({
     selector: 'app-chat',
@@ -7,16 +16,15 @@ import { Router } from '@angular/router';
     styleUrls: ['./chat.component.css']
 })
 export class ChatComponent implements OnInit{
-
+    
     constructor(private router: Router) {}
 
-    ngOnInit() {        
+    ngOnInit() {
         if (!this.isAuthenticated()) {            
             this.router.navigateByUrl('/auth');
             return;
         }
         
-        initClient();
         this.muteLocalVideo();
     }
 

@@ -130,6 +130,16 @@ io.sockets.on('connection', function(socket) {
      * ********************/
     
     //Añadimos el usuario a la lista global de usuarios.
+    for (let userIterated of users) {
+      if (userIterated.username === username) {
+        
+      console.log('User ' + username + ' is already in the list. Reassigning...')
+        users[index] = user;
+        return;
+      }
+    }
+
+    console.log('Adding user ' + username + ' to the list.')
     users.push(user);
   });
 
@@ -141,7 +151,7 @@ io.sockets.on('connection', function(socket) {
 
   socket.on('call', function (calledName) {
    // log('Received request to pick up ');
-    
+    console.log("Calling... Number of users: " + users.length);
     //Buscamos en la lista de usuarios el primer usuario con ese nombre (deben ser únicos)
     var foundUsers = users.filter(user => user.username === calledName);
     if (!foundUsers.length) {
@@ -184,7 +194,7 @@ io.sockets.on('connection', function(socket) {
     //Removing the user that sent the disconnected message from the online users list.
     for (let user of users) {
       if (user.username === username) {
-        io.sockets.in(room).emit('userdisconnected');
+        //io.sockets.in(room).emit('userdisconnected');
         console.log('User ' + username + ' just disconnected');
         users.splice(index, 1);
         return;

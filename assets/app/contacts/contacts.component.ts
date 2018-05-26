@@ -1,4 +1,4 @@
-import { Component, OnInit, Output } from '@angular/core';
+import { Component, OnInit, Output, Input } from '@angular/core';
 import { ContactService } from './contact.service';
 import { User } from '../auth/user.model';
 import { FormGroup, FormControl, Validators } from '@angular/forms';
@@ -33,13 +33,20 @@ export class ContactsComponent implements OnInit{
         this.form = new FormGroup({
             username: new FormControl(null, Validators.required)
         });
+
+        initClient();
     }
 
+    // @Input()
+    // set ready(isReady: boolean) {
+    //   if (isReady) someCallbackMethod();
+    // }
+    
     onCall(e) {
         var username = e.target.dataset.username;
         
-        // alert(username);
-        // call(username);
+        alert(username);
+        call(username);
     }
     
     onSubmit() {        
