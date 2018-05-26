@@ -17,6 +17,7 @@
   };
   
   var username;
+  var calleeUsername;
   
   // Set up audio and video regardless of what devices are present.
   var sdpConstraints = {
@@ -54,11 +55,10 @@
     socket.emit('message', message);
   }
 
-  function call(calleeUsername) {
+  function call(newCalleeUsername) {
     isInitiator = true;
+    calleeUsername = newCalleeUsername;
     getUserMedia(constraints, handleUserMedia, handleUserMediaError);
-    
-    socket.emit('call', calleeUsername);
   }
 //
   //Una vez nos llaman podemos pulsar el botón de coger la llamada
@@ -68,7 +68,8 @@
   }
 
   function listen() {
-    socket.onclose('User left');
+    //Handling on close
+    socket.onclose('User left.');
     
     socket.on('calling', function(serverRoom, serverCallerId) {
       console.log('calling...');
@@ -170,6 +171,8 @@
     localStream = stream;
     sendMessage('got user media');
     if (isInitiator) {
+      //Once we've got the user media, we can call the other user.
+      socket.emit('call', calleeUsername);
       maybeStart();
     }
   }

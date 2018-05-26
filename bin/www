@@ -102,6 +102,7 @@ var users = [];
 console.log('Server listening on port ' + port);
 
 io.sockets.on('connection', function(socket) {
+  console.log('Users online: ' + users.length);
   function log() {
     var array = ['Message from server:'];
     array.push.apply(array, arguments);
@@ -178,7 +179,9 @@ io.sockets.on('connection', function(socket) {
   //Una vez el usuario ha sido llamado y lo ha cogido se une a la habitación en cuestión
   socket.on('pickup', function (room, callerId) {
     var user = users.filter(user => user.socket.id === callerId)[0];
-    
+    if (!user) {
+      return;
+    }
     //TODO: IF NO USER, EMIT USERDISCONNECTED
     console.log('The call from ' + user.username + ' was answered');
     socket.join(room);
@@ -191,14 +194,14 @@ io.sockets.on('connection', function(socket) {
   });
 
   //On user disconnect
-  socket.on('disconnect', function (room, username) {
+  socket.on('disconnect', function (room, username, reason) {
     var index = 0;
-    console.log('User ' + username + ' disconnected.');
+    console.log('Disconnection: ' + room + ' | ' + username + ' | ' + reason);
     //Removing the user that sent the disconnected message from the online users list.
     for (let user of users) {
-      if (user.username === username) {
+      if (user.socket.id === this.id) {
         //io.sockets.in(room).emit('userdisconnected');
-        console.log('User ' + username + ' just disconnected');
+        console.log('Users online after disconnect: ' + users.length);
         users.splice(index, 1);
         return;
       }
