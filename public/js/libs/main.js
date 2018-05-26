@@ -55,7 +55,9 @@
   }
 
   function call(calleeUsername) {
+    isInitiator = true;
     getUserMedia(constraints, handleUserMedia, handleUserMediaError);
+    
     socket.emit('call', calleeUsername);
   }
 //
@@ -66,8 +68,10 @@
   }
 
   function listen() {
+    socket.onclose('User left');
+    
     socket.on('calling', function(serverRoom, serverCallerId) {
-      isInitiator = true;
+      console.log('calling...');
     });
     
     //Un usuario está llamando a este cliente, recibiendo por parámetro el string de la habitación
@@ -143,10 +147,11 @@
     
 
     window.addEventListener("beforeunload", function (e) {      
-      sendMessage('disconnect');
-      socket.emit('disconnect', username);
+      // sendMessage('disconnect');
+      // socket.emit('disconnect', username);
     
-      (e || window.event).returnValue = null;
+      // (e || window.event).returnValue = null;
+      
       return null;
     });
   }

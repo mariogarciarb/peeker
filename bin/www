@@ -117,7 +117,8 @@ io.sockets.on('connection', function(socket) {
     //socket.emit('message', message);
   });
 
-  socket.on('presentation', function(username) {    
+  socket.on('presentation', function(username) {
+    var index = 0;
     var user = {
       username: username,
       socket: socket
@@ -137,6 +138,8 @@ io.sockets.on('connection', function(socket) {
         users[index] = user;
         return;
       }
+
+      index++;
     }
 
     console.log('Adding user ' + username + ' to the list.')
@@ -190,7 +193,7 @@ io.sockets.on('connection', function(socket) {
   //On user disconnect
   socket.on('disconnect', function (room, username) {
     var index = 0;
-    
+    console.log('User ' + username + ' disconnected.');
     //Removing the user that sent the disconnected message from the online users list.
     for (let user of users) {
       if (user.username === username) {
