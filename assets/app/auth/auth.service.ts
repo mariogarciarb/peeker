@@ -5,13 +5,16 @@ import { User } from "./user.model";
 //Observable imports
 import 'rxjs/Rx';
 import { Observable } from "rxjs";
+import { DataService } from "../data.service";
 
 @Injectable()
-export class AuthService {
-    private domain: string = 'http://192.168.0.13:3000';
-    constructor(private http: Http) {
-
+export class AuthService{
+    private URL: string;
+    constructor(private http: Http, private data: DataService) {
+        //Setting the URL by the service that contains global data updated.
+        this.data.URL.subscribe(currentURL => this.URL = currentURL);
     }
+
     signup(user: User) {
         const body = JSON.stringify(user);
         
@@ -19,19 +22,18 @@ export class AuthService {
             'Content-Type': 'application/json'
         });
 
-        return this.http.post(this.domain + '/user', body, {headers: headers})
+        return this.http.post(this.URL + '/user', body, {headers: headers})
             .map((response: Response) => response.json()).
             catch((error: Response) => Observable.throw(error.json()));
     }
 
     signin(user: User) {
         const body = JSON.stringify(user);
-        
         const headers = new Headers({
             'Content-Type': 'application/json'
         });
 
-        return this.http.post(this.domain + '/user/signin', body, {headers: headers})
+        return this.http.post(this.URL + '/user/signin', body, {headers: headers})
             .map((response: Response) => response.json()).
             catch((error: Response) => Observable.throw(error.json()));
     }
@@ -43,7 +45,7 @@ export class AuthService {
             'Content-Type': 'application/json'
         });
 
-        return this.http.post(this.domain + '/user/search', body, {headers: headers})
+        return this.http.post(this.URL + '/user/search', body, {headers: headers})
             .map((response: Response) => response.json()).
             catch((error: Response) => Observable.throw(error.json()));
     }

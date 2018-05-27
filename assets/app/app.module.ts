@@ -20,13 +20,16 @@ import { HttpModule } from '@angular/http';
 import { AuthService } from './auth/auth.service';
 import { ContactService } from './contacts/contact.service';
 import { ContactsListComponent } from './contacts/contacts-list.component';
+import { ResultsListComponent } from './contacts/results-list.component';
+import { DataService } from './data.service';
+import { AboutComponent } from './about/about.component';
 
 @NgModule({
     declarations: [
         AppComponent,
         ContactsComponent,
         ContactsListComponent,
-        
+        ResultsListComponent,
         ChatComponent,
         NavComponent,
         AsideComponent,
@@ -36,7 +39,8 @@ import { ContactsListComponent } from './contacts/contacts-list.component';
         HomeComponent,
         LogoutComponent,
         SignupComponent,
-        SigninComponent
+        SigninComponent,
+        AboutComponent
     ],
     imports: [
         BrowserModule,
@@ -48,7 +52,8 @@ import { ContactsListComponent } from './contacts/contacts-list.component';
         //Whatever I provide here, is available in the whole app (all components also)
         providers: [
             AuthService,
-            ContactService
+            ContactService,
+            DataService
         ],
     bootstrap: [AppComponent]
 })

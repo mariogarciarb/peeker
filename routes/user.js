@@ -35,6 +35,7 @@ router.post('/', function (req, res, next) {
 
 router.post('/signin', function (req, res, next) {
     //Looking for one user with the email the user entered in the login form (email is unique, that's why).
+    console.log('Loggin in...');
     User.findOne(
         {email: req.body.email },
         

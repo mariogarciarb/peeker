@@ -5,15 +5,19 @@ import { Http, Response, Headers } from "@angular/http";
 //Observable imports
 import 'rxjs/Rx';
 import { Observable } from "rxjs";
+import { DataService } from "../data.service";
 
 @Injectable()
-export class ContactService{    
-    private domain: string = 'http://192.168.0.13:3000';//192.168.137.1
+export class ContactService {    
     private contacts: User[] = [];3
     private fetchedUsers: User[] = [];
+    private URL: string = "";
 
-    constructor(private http: Http) {}
-
+    constructor(private http: Http, private data: DataService) {
+        //Setting the URL by the service that contains global data updated.
+        this.data.URL.subscribe(currentURL => this.URL = currentURL);
+    }
+    
     addContact(index: number) {
         const token = this.getToken();
         var user = this.fetchedUsers[index];
@@ -24,7 +28,7 @@ export class ContactService{
             'Content-Type': 'application/json'
         });
 
-        return this.http.post(this.domain + '/contact/' + token, body, {headers: headers})
+        return this.http.post(this.URL + '/contact/' + token, body, {headers: headers})
             .map((response: Response) => response.json().res).
             catch((error: Response) => Observable.throw(error.json()));
 
@@ -34,12 +38,9 @@ export class ContactService{
         //Not headers are needed since we're not sending any data.
         
         const token = this.getToken();
-        return this.http.get(this.domain + '/contact/' + token)
+        return this.http.get(this.URL + '/contact/' + token)
             .map((response: Response) => {
                 const contacts = response.json().contacts;
-                console.log('----------');
-                console.log(contacts);
-                console.log('----------');
                 let transformedContacts: User[] = [];
 
                 //MongoDB stores users with some attributes that don't match the client User model.
@@ -64,7 +65,7 @@ export class ContactService{
             'Content-Type': 'application/json'
         });
 
-        return this.http.post(this.domain + '/contact/search' + token, body, {headers: headers})
+        return this.http.post(this.URL + '/contact/search' + token, body, {headers: headers})
             .map((response: Response) => {
                 const users = response.json().users;
                 let transformedUsers: User[] = [];

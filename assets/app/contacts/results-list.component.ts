@@ -4,9 +4,9 @@ import { User } from '../auth/user.model';
 import { Router } from '@angular/router';
 
 @Component({
-    selector: 'app-contacts-list',
-    templateUrl: './contacts-list.component.html',
-    styleUrls: ['./contacts-list.component.css']
+    selector: 'app-results-list',
+    templateUrl: './results-list.component.html',
+    styleUrls: ['./results-list.component.css']
 })
 
 export class ResultsListComponent implements OnInit{
