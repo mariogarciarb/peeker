@@ -1,9 +1,0 @@
-npm run build
-
-npm start
-
-En la ruta 
-creamos el directorio donde MongoDB va a almacenar datos con el siguiente comando: md "C:\Program Files\MongoDB\Server\3.6\bin\data\db"
-
-Para arrancar el servidor de MongoDB mediante el siguiente comando:
-"C:\Program Files\MongoDB\Server\3.6\bin\mongod"

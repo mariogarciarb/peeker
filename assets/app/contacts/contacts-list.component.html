@@ -1,0 +1,21 @@
+
+<div class="col-12 container-fluid contacts-container py-3 bg-white">
+    <div class="row justify-content-center align-items-center">
+        <h1 class="col-12">Contacts</h1>
+    </div>
+    <hr class="title-separator">
+    <div class="row justify-content-center align-items-center">
+        <ul class="list-group offset-1 col-10">
+            <li class="list-group-item d-flex flex-row align-items-center" 
+                *ngFor="let contact of contacts">
+                <div class="info col-9">
+                    <h5>{{ contact.username }}</h5>
+                    <small>{{ contact.firstName }} {{ contact.secondName }}</small>
+                </div>
+                <div class="actions col-3">
+                    <a (click)="onCall($event)" class="btn call" [attr.data-username]="contact.username">Call</a>
+                </div>
+            </li>
+        </ul>
+    </div>
+</div>
