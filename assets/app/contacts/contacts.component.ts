@@ -44,6 +44,8 @@ export class ContactsComponent implements OnInit{
     
     onCall(e) {
         var username = e.target.dataset.username;
+        
+        alert(username);
         call(username);
     }
     

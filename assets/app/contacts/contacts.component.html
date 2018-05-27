@@ -1,8 +1,6 @@
 <h1>Contacts</h1>
 <div class="col-md-8 col-md-offset-2 container-fluid">
     <div class="row">
-        
-    <app-contacts-list></app-contacts-list>
         <!-- <form [formGroup]="form" (ngSubmit)="onSubmit()">
             <div class="form-group">
                 <label for="username">Username</label>
@@ -32,4 +30,21 @@
             </li>
         </ul>
     </div> -->
+    <hr>
+    <div class="row">
+        <ul class="list-group">
+            <li class="list-group-item d-flex flex-row align-items-center" 
+                *ngFor="let contact of contacts; let i = index">
+                <div class="info col-9">
+                    <h5>{{ contact.username }}</h5>
+                    <small>{{ contact.firstName }} {{ contact.secondName }}</small>
+                </div>
+                <div class="actions col-3">
+                    <a (click)="onAddContact($event)" [attr.data-index]="i">Add</a>
+                    <a (click)="onCall($event)" class="btn call" [attr.data-username]="contact.username">Call</a>
+                </div>
+                <!-- (click)="onCall($event)" -->
+            </li>
+        </ul>
+    </div>
 </div>

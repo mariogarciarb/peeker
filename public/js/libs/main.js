@@ -74,10 +74,6 @@
     socket.on('calling', function(serverRoom, serverCallerId) {
       console.log('calling...');
     });
-
-    socket.on('userdisconnected', function(calledUsername, strMessage) {
-      alert(strMessage);
-    });
     
     //Un usuario está llamando a este cliente, recibiendo por parámetro el string de la habitación
     socket.on('called', function(serverRoom, serverCallerId) {
@@ -184,6 +180,8 @@
   function handleUserMediaError(error) {
     console.log('getUserMedia error: ', error);
   }
+
+  console.log('Getting user media with constraints', constraints);
   
 
   function maybeStart() {

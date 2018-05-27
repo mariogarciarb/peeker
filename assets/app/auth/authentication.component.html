@@ -1,10 +1,11 @@
-
-<header class="row ">
-    <ul class="nav nav-tabs">
-        <li class="nav-item"><a class="nav-link" routerLinkActive="active" [routerLink]="['signin']">Sign in</a></li>
-        <li class="nav-item"><a class="nav-link" routerLinkActive="active" [routerLink]="['signup']">Sign up</a></li>
-    </ul>
+<header class="row spacing">
+    <nav class="col-md-8 col-md-offset-2">
+        <ul class="nav nav-tabs">
+            <li routerLinkActive="active"><a [routerLink]="['signin']">Sign in</a></li>
+            <li routerLinkActive="active"><a [routerLink]="['signup']">Sign up</a></li>
+        </ul>
+    </nav>
 </header>
-<div class="row ">
+<div class="row spacing">
     <router-outlet></router-outlet>
 </div>

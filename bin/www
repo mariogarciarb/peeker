@@ -159,8 +159,8 @@ io.sockets.on('connection', function(socket) {
     //Buscamos en la lista de usuarios el primer usuario con ese nombre (deben ser únicos)
     var foundUsers = users.filter(user => user.username === calledName);
     if (!foundUsers.length) {
-      let strMsg = 'The user you\'re trying to call is disconnected';
-      socket.emit('userdisconnected', calledName, strMsg);
+      console.log('The user you\'re trying to call is disconnected');
+      socket.emit('Usuario desconectado', calledName);
       return;
     }
 

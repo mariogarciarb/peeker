@@ -19,14 +19,11 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { HttpModule } from '@angular/http';
 import { AuthService } from './auth/auth.service';
 import { ContactService } from './contacts/contact.service';
-import { ContactsListComponent } from './contacts/contacts-list.component';
 
 @NgModule({
     declarations: [
         AppComponent,
         ContactsComponent,
-        ContactsListComponent,
-        
         ChatComponent,
         NavComponent,
         AsideComponent,
