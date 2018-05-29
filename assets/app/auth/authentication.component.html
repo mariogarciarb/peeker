@@ -1,10 +1,10 @@
 
-<header class="row ">
-    <ul class="nav nav-tabs">
-        <li class="nav-item"><a class="nav-link" routerLinkActive="active" [routerLink]="['signin']">Sign in</a></li>
-        <li class="nav-item"><a class="nav-link" routerLinkActive="active" [routerLink]="['signup']">Sign up</a></li>
+<header class="row">
+    <ul class="nav nav-tabs w-100 row no-gutters justify-content-between">
+        <li class="nav-item col-6"><a class="nav-link color--white bg--primary" routerLinkActive="active" [routerLink]="['signin']">Sign in</a></li>
+        <li class="nav-item col-6"><a class="nav-link color--white bg--primary" routerLinkActive="active" [routerLink]="['signup']">Sign up</a></li>
     </ul>
 </header>
-<div class="row ">
+<div class="row bg-white border-tabbed auth-body">
     <router-outlet></router-outlet>
 </div>

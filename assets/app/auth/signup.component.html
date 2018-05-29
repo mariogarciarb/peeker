@@ -2,7 +2,7 @@
     <div class="col-md-8 col-md-offset-2">
         <form [formGroup]="form" (ngSubmit)="onSubmit()">
             <div class="form-group">
-                <label for="name">email</label>
+                <label for="name" class="color--primary">E-mail</label>
                 <input type="text"
                     id="email"
                     class="form-control"
@@ -10,7 +10,7 @@
             </div> 
     
             <div class="form-group">
-                <label for="username">Username</label>
+                <label for="username" class="color--primary">Username</label>
                 <input type="text"
                     id="username"
                     class="form-control"
@@ -18,7 +18,7 @@
             </div>
             
             <div class="form-group">
-                <label for="firstName">First name</label>
+                <label for="firstName" class="color--primary">First name</label>
                 <input type="text"
                     id="firstName"
                     class="form-control"
@@ -26,14 +26,14 @@
             </div>        
     
             <div class="form-group">
-                <label for="secondName">Second name</label>
+                <label for="secondName" class="color--primary">Second name</label>
                 <input type="text"
                     id="secondName"
                     class="form-control"
                     formControlName="secondName">
             </div>        
             <div class="form-group">
-                <label for="password">Password</label>
+                <label for="password" class="color--primary">Password</label>
                 <input type="password"
                     id="password"
                     class="form-control"
@@ -41,7 +41,7 @@
             </div>
     
             <button 
-                class="btn btn-primary"
+            class="btn bg--primary color--white"
                 type="submit"
                 [disabled]="!form.valid">Register</button>
         </form>

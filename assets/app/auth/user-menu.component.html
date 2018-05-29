@@ -1,0 +1,23 @@
+<ul class="navbar-nav mr-auto">
+    <li *ngIf="authService.isLoggedIn()" class="nav-item dropdown">
+        <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+        {{ authService.getUsername() }}
+        </a>
+        <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+            <!-- <div class="dropdown-divider"></div> -->
+            <a class="dropdown-item" href="#">
+                <app-logout></app-logout>
+            </a>
+        </div>
+    </li>
+    <li *ngIf="!authService.isLoggedIn()" class="nav-item dropdown align-items-center">
+        <ul class="navbar-nav">
+            <li routerLinkActive="active" class="nav-item">
+                <a [routerLink]="['auth/signin']" class="nav-link" href="#">Sign in</a>
+            </li>
+            <li routerLinkActive="active" class="nav-item">
+                <a [routerLink]="['auth/signup']" class="nav-link" href="#">Sign up</a>
+            </li>
+        </ul>
+    </li>
+</ul>
