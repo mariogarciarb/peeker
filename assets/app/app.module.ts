@@ -23,6 +23,7 @@ import { ContactsListComponent } from './contacts/contacts-list.component';
 import { ResultsListComponent } from './contacts/results-list.component';
 import { DataService } from './data.service';
 import { AboutComponent } from './about/about.component';
+import { UserMenuComponent } from './auth/user-menu.component';
 
 @NgModule({
     declarations: [
@@ -31,6 +32,7 @@ import { AboutComponent } from './about/about.component';
         ContactsListComponent,
         ResultsListComponent,
         ChatComponent,
+        UserMenuComponent,
         NavComponent,
         AsideComponent,
         FooterComponent, 

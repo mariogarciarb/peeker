@@ -37,6 +37,14 @@ export class AuthService{
             .map((response: Response) => response.json()).
             catch((error: Response) => Observable.throw(error.json()));
     }
+    
+    isLoggedIn() {
+        return localStorage.getItem('token') !== null;
+    }
+
+    getUsername() {
+        return localStorage.getItem('username');
+    }
 
     search(strUsername: string) {
         const body = JSON.stringify(strUsername);
