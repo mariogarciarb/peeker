@@ -41,7 +41,10 @@ export class AuthService{
     isLoggedIn() {
         return localStorage.getItem('token') !== null;
     }
-
+    
+    isSessionExpired(err: any) {
+        return err.name === 'TokenExpiredError';
+    }
     getUsername() {
         return localStorage.getItem('username');
     }
