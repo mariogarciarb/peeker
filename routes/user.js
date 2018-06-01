@@ -22,7 +22,6 @@ router.post('/', function (req, res, next) {
         }
         //If no errors, it will return a json message "User created".
 
-        //the token expires in 2 hours.
         var token = jwt.sign({user: user}, 'secret', {expiresIn: 86400});//24hr
         res.status(200).json({
             message: 'Succesfully logged in',

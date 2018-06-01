@@ -209,7 +209,10 @@
       pc.onremovestream = handleRemoteStreamRemoved;
       console.log('Created RTCPeerConnnection');
     } catch (e) {
+      
+      sendMessage('Failed to create PeerConnection, exception: ' + e.message);
       console.log('Failed to create PeerConnection, exception: ' + e.message);
+
       alert('Cannot create RTCPeerConnection object.');
       return;
     }
