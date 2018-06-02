@@ -1,6 +1,6 @@
 
   'use strict';
-
+ 
   var isChannelReady = false;
   var isInitiator = false;
   var isStarted = false;
@@ -15,9 +15,13 @@
       'url': 'stun:stun.l.google.com:19302'
     }]
   };
-  
   var username;
   var calleeUsername;
+  
+  //Callback functions
+  var onRemoteHangUpCallback;
+  var onToggleCallScreenCallback;
+  var onToggleReceivedCallScreenCallback;
   
   // Set up audio and video regardless of what devices are present.
   var sdpConstraints = {
@@ -37,14 +41,25 @@
 
   var socket;
   
-  function initClient() {
-    username = localStorage.getItem('username');
-    socket      = io.connect();
-    localVideo  = document.querySelector('#localVideo');
-    remoteVideo = document.querySelector('#remoteVideo');
+  function initClient(newRemoteHangUpCallback,
+                      newToggleCallScreenCallback,
+                      newToggleReceivedCallScreenCallback) {
+    //Initializing variables                    
+    socket                               = io.connect();
+    username                             = localStorage.getItem('username');
+    localVideo                           = document.querySelector('#localVideo');
+    remoteVideo                          = document.querySelector('#remoteVideo');
 
+    //Initializing callback functions                    
+    onRemoteHangUpCallback               = newRemoteHangUpCallback;
+    onToggleCallScreenCallback           = newToggleCallScreenCallback;
+    onToggleReceivedCallScreenCallback   = newToggleReceivedCallScreenCallback;
+    
+    //Initializing listeners
     listen();
     console.log('Making presentation. My name is: ' + username);
+
+    //Telling the server who the user is
     socket.emit('presentation', username);
     // document.querySelector('.btn.call').addEventListener('click', call);
     // document.querySelector('.btn.pickup').addEventListener('click', pickUp);
@@ -62,9 +77,34 @@
   }
 //
   //Una vez nos llaman podemos pulsar el botón de coger la llamada
-  function pickUp(e) {
+  function pickUp() {
+    alert('en pickup');
     getUserMedia(constraints, handleUserMedia, handleUserMediaError);
     socket.emit('pickup', room, callerId);
+  }
+
+  function rejectCall(callerId) {
+    alert('rejecting');
+    socket.emit('rejectcall', callerId);
+  }
+  
+  function cancelCall() {
+    alert('canceling');
+    socket.emit('cancelcall', calleeUsername);
+  }
+  
+  function toggleMute() {
+    var audioTracks = localStream.getAudioTracks();
+    for (let audioTrack of audioTracks) {
+      audioTrack.enabled = !audioTrack.enabled;
+    }
+  }
+
+  function togglePause() {
+    var videoTracks = localStream.getVideoTracks();
+    for (let videoTrack of videoTracks) {
+      videoTrack.enabled = !videoTrack.enabled;
+    }
   }
 
   function listen() {
@@ -85,15 +125,27 @@
       room = serverRoom;
       callerId = serverCallerId;
 
-      if (confirm('Do you want to take the call?')) {
-        pickUp();
-      }
+      //Executing callback function from chat component.
+      //TODO: Pasar username
+      onToggleReceivedCallScreenCallback();
     });  
 
     //Una vez el otro usuario ha cogido la llamada
     socket.on('pickedup', function(room) {
       //Establecemos la variable isChannelReady como erdadera porque ya está listo para la comunicación
       isChannelReady = true;
+    });  
+
+    //Una vez el otro usuario ha rechazado la llamada
+    socket.on('rejectedcall', function(room) {
+      alert('user rejected the call');
+      onToggleCallScreenCallback();
+    });  
+    
+    //Una vez el otro usuario ha rechazado la llamada
+    socket.on('canceledcall', function(room) {
+      alert('user canceled the call');
+      onToggleReceivedCallScreenCallback();
     });  
 
     socket.on('ready', function(room) {
@@ -313,14 +365,17 @@
     console.log('Session terminated.');
     stop();
     isInitiator = false;
+
+    //Calling the callback from the component
+    onRemoteHangUpCallback();
   }
 
   function stop() {
     isStarted = false;
-    // isAudioMuted = false;
-    // isVideoMuted = false;
-    pc.close();
-    pc = null;
+    if (pc) {
+      pc.close();
+      pc = null;
+    }
   }
 
   // Set Opus as the default audio codec if it's present.

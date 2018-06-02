@@ -1,13 +1,17 @@
-<section class="main-content container">
-  <div class="row no-gutters">
-      <div class="col-md-8 col-lg-9 col-xl-10 content logo__img--grayblue bg-image">
+<section class="main-content container-fluid bg--glitter m-0 p-0">
+  <div class="row no-gutters w-100">
+      <app-contacts-list (onCall)="onCall($event)" class="col-md-4 col-lg-3 col-xl-2 justify-content-end"></app-contacts-list>
+      <div class="content col-md-8 col-lg-9 col-xl-10 justify-content-center align-items-center">
         <div class="row align-items-end justify-content-center">
           <video id="remoteVideo" class="remoteVideo col-lg-8" autoplay></video>
           <video id="localVideo" class="localVideo col-lg-4" muted autoplay ></video>
         </div>
+        <button (click)="onPause($event)" class="btn on-call-btn pause-btn bg--primary"><i class="fas fa-video"></i></button>
+        <button (click)="onMute($event)" class="btn on-call-btn mute-btn bg--primary"><i class="fas fa-microphone"></i></button>
+        <button (click)="onHangUp($event)" class="btn on-call-btn hangup-btn"><i class="fas fa-phone hangup-phone"></i></button>
+        <!-- Logo background image -->
+        <div class="logo__img--grayblue bg-image bg-main"></div>
       </div>
-      
-      <app-contacts-list class="col-md-4 col-lg-3 col-xl-2 justify-content-end"></app-contacts-list>
   </div>
 </section>
   

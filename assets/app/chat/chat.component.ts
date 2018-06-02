@@ -26,6 +26,12 @@ export class ChatComponent implements OnInit{
         }
         
         this.muteLocalVideo();
+
+        //Initializing client with callbacks
+        initClient(
+            this.onRemoteHangup, 
+            this.toggleCallScreen,
+            this.toggleReceivedCallScreen);
     }
 
     muteLocalVideo() {                
@@ -33,8 +39,69 @@ export class ChatComponent implements OnInit{
         element.muted = "muted";
     }
 
+    onCall(username) {
+        this.toggleCallScreen();
+        call(username);
+    }
+
+    onHangUp(e) {
+        hangup();
+        this.toggleCallScreen();
+    }
+
+    onRemoteHangup() {
+        onToggleCallScreenCallback();
+    }
+
+    onMute(e) {
+        toggleMute();
+        var muteIcon = document.querySelector('.mute-btn i');
+        e.target.classList.toggle('active-btn');
+        muteIcon.classList.toggle('fa-microphone');
+        muteIcon.classList.toggle('fa-microphone-slash');
+    }
+
+    onPause(e) {
+        togglePause();
+        var muteIcon = document.querySelector('.pause-btn i');
+        e.target.classList.toggle('active-btn');
+        muteIcon.classList.toggle('fa-video');
+        muteIcon.classList.toggle('fa-video-slash');
+    }
+
+    toggleCallScreen() {
+        document.querySelector('.main-content .content').classList.toggle('on-call');
+        document.querySelectorAll('.on-call-btn')
+            .forEach(element => {
+                element.classList.toggle('visible');
+            });
+    }
+
+    toggleReceivedCallScreen() {                                                //on-fullscreen
+        // document.querySelector('.received-call-screen').classList.toggle('on-screen');
+        // document.querySelectorAll('.received-call-btn')
+        //     .forEach(element => {
+        //         element.classList.toggle('visible');
+        //     });
+        rejectCall(callerId);
+    }
+
+    onPickUp() {
+        // this.toggleReceivedCallScreen();
+        this.toggleCallScreen();
+        pickUp();
+    }
+
+    onCallReject() {
+        this.toggleReceivedCallScreen();
+    }
+
+    onCancelCall() {
+        cancelCall();
+        this.toggleCallScreen();
+    }
+
     isAuthenticated() {
-        console.log(localStorage.getItem('token'));
         return localStorage.getItem('token');
     }
 }
