@@ -185,11 +185,8 @@ app-authentication {
   Call global styles
 */
 
-.on-call {
-  position: absolute;
-  background-color: blue;
-  z-index: 1000;
-  flex: 0 0 100%;
+.on-screen {
+  background-color: rgb(80, 80, 255);
   height: 100%;
   max-width: 100%;    
 }
@@ -206,11 +203,11 @@ app-authentication {
   transform: rotate(90deg);
 }
 
-.hangup-phone {
+.hangup-phone,.reject-btn{
   transform: rotate(225deg);
 }
 
-.hangup-btn {
+.hangup-btn,.reject-btn {
   background-color: #bb0000;
 }
 

@@ -41,8 +41,7 @@
 
   var socket;
   
-  function initClient(newRemoteHangUpCallback,
-                      newToggleCallScreenCallback,
+  function initClient(newToggleCallScreenCallback,
                       newToggleReceivedCallScreenCallback) {
     //Initializing variables                    
     socket                               = io.connect();
@@ -51,7 +50,6 @@
     remoteVideo                          = document.querySelector('#remoteVideo');
 
     //Initializing callback functions                    
-    onRemoteHangUpCallback               = newRemoteHangUpCallback;
     onToggleCallScreenCallback           = newToggleCallScreenCallback;
     onToggleReceivedCallScreenCallback   = newToggleReceivedCallScreenCallback;
     
@@ -80,10 +78,11 @@
   function pickUp() {
     alert('en pickup');
     getUserMedia(constraints, handleUserMedia, handleUserMediaError);
+    console.log('picking up before i accepted the user media LMAOXDDDDD');
     socket.emit('pickup', room, callerId);
   }
 
-  function rejectCall(callerId) {
+  function rejectCall() {
     alert('rejecting');
     socket.emit('rejectcall', callerId);
   }
@@ -116,6 +115,8 @@
     });
 
     socket.on('userdisconnected', function(calledUsername, strMessage) {
+      onToggleCallScreenCallback();      
+      hangup();
       alert(strMessage);
     });
     
@@ -362,12 +363,13 @@
   }
 
   function handleRemoteHangup() {
-    console.log('Session terminated.');
+    alert('Me han colgado');
     stop();
     isInitiator = false;
 
     //Calling the callback from the component
-    onRemoteHangUpCallback();
+    onToggleCallScreenCallback();
+
   }
 
   function stop() {
@@ -376,6 +378,17 @@
       pc.close();
       pc = null;
     }
+    stopUserMediaStream();
+  }
+
+  function stopUserMediaStream() {
+    alert('stopping userMedia')
+    if (!localStream) {
+      return;
+    }
+
+    localStream.getTracks()
+      .forEach(mediaTrack => mediaTrack.stop());
   }
 
   // Set Opus as the default audio codec if it's present.

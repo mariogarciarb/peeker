@@ -13,32 +13,24 @@
 *
 **/
 
-padding: 15rem;
+/* padding: 15rem; */
 }
   
 
 .localVideo {
     height: 8rem;
     width: auto;
-
-    position: absolute;
-    bottom: 0;
-    right: 0;
-    z-index: 10;
-    align-self: center;
-    justify-content: center;
+    align-self: flex-end;
 }
 
 .remoteVideo {
-    height: 28rem;
-    
-    position: absolute;
-    z-index: 9;
+    height: auto;
     align-self: center;
-    justify-content: center;
 }
 
-
+.bg-main {
+    position: absolute;
+}
 
   /*
     Media queries

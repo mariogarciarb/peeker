@@ -29,9 +29,10 @@ export class ChatComponent implements OnInit{
 
         //Initializing client with callbacks
         initClient(
-            this.onRemoteHangup, 
             this.toggleCallScreen,
             this.toggleReceivedCallScreen);
+
+        // $('#remoteVideo').css('height', ($(window).height() - $('nav').height())+ 'px');
     }
 
     muteLocalVideo() {                
@@ -47,10 +48,6 @@ export class ChatComponent implements OnInit{
     onHangUp(e) {
         hangup();
         this.toggleCallScreen();
-    }
-
-    onRemoteHangup() {
-        onToggleCallScreenCallback();
     }
 
     onMute(e) {
@@ -70,30 +67,36 @@ export class ChatComponent implements OnInit{
     }
 
     toggleCallScreen() {
-        document.querySelector('.main-content .content').classList.toggle('on-call');
+        var screen = document.querySelector('.main-content .on-call-screen');
+        screen.classList.toggle('on-screen');
+        screen.classList.toggle('d-none');
+
         document.querySelectorAll('.on-call-btn')
             .forEach(element => {
                 element.classList.toggle('visible');
             });
     }
 
-    toggleReceivedCallScreen() {                                                //on-fullscreen
-        // document.querySelector('.received-call-screen').classList.toggle('on-screen');
-        // document.querySelectorAll('.received-call-btn')
-        //     .forEach(element => {
-        //         element.classList.toggle('visible');
-        //     });
-        rejectCall(callerId);
+    toggleReceivedCallScreen() {    
+        var screen = document.querySelector('.main-content .received-call-screen');
+        screen.classList.toggle('on-screen');
+        screen.classList.toggle('d-none');
+
+        document.querySelectorAll('.received-call-btn')
+            .forEach(element => {
+                element.classList.toggle('visible');
+            });
     }
 
     onPickUp() {
-        // this.toggleReceivedCallScreen();
+        this.toggleReceivedCallScreen();
         this.toggleCallScreen();
         pickUp();
     }
 
     onCallReject() {
         this.toggleReceivedCallScreen();
+        rejectCall();
     }
 
     onCancelCall() {
