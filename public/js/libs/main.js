@@ -35,7 +35,7 @@
     audio: true
   };
 
-  var room, callerId;
+  var room = "" , callerId;
   // Could prompt for room name:
   // room = prompt('Enter room name:');
 
@@ -65,7 +65,7 @@
 
   function sendMessage(message) {
     console.log('Client sending message: ', message);
-    socket.emit('message', message);
+    socket.emit('message', room, message);
   }
 
   function call(newCalleeUsername) {
@@ -118,11 +118,11 @@
     });
     
     //Un usuario está llamando a este cliente, recibiendo por parámetro el string de la habitación
-    socket.on('called', function(serverRoom, serverCallerId) {
+    socket.on('called', function(serverRoom, serverCallerId, callerUsername) {
       isInitiator = false;
       room = serverRoom;
       callerId = serverCallerId;      
-      onToggleReceivedCallScreenCallback();
+      onToggleReceivedCallScreenCallback(callerUsername);
 
       //Executing callback function from chat component.
       //TODO: Pasar username
@@ -225,7 +225,7 @@
     localStream = stream;
     if (isInitiator) {
       //Once we've got the user media, we can call the other user.
-      socket.emit('call', calleeUsername);
+      socket.emit('call', calleeUsername, username);
     } else {      
       socket.emit('pickup', room, callerId);
     }
@@ -260,7 +260,7 @@
       console.log('Created RTCPeerConnnection');
     } catch (e) {
       
-      sendMessage('Failed to create PeerConnection, exception: ' + e.message);
+      sendMessage(room, 'Failed to create PeerConnection, exception: ' + e.message);
       console.log('Failed to create PeerConnection, exception: ' + e.message);
 
       alert('Cannot create RTCPeerConnection object.');
@@ -271,7 +271,7 @@
   function handleIceCandidate(event) {
     console.log('icecandidate event: ', event);
     if (event.candidate) {
-      sendMessage({
+      sendMessage(room, {
         type: 'candidate',
         label: event.candidate.sdpMLineIndex,
         id: event.candidate.sdpMid,
@@ -313,7 +313,7 @@
     sessionDescription.sdp = preferOpus(sessionDescription.sdp);
     pc.setLocalDescription(sessionDescription);
     console.log('setLocalAndSendMessage sending message', sessionDescription);
-    sendMessage(sessionDescription);
+    sendMessage(room, sessionDescription);
   }
 
   function onAnswerFailure() {
@@ -356,7 +356,7 @@
   function hangup() {
     console.log('Hanging up.');
     stop();
-    sendMessage('bye');
+    sendMessage(room, 'bye');
   }
 
   function handleRemoteHangup() {

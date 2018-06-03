@@ -82,11 +82,11 @@ export class ChatComponent implements OnInit{
             });
     }
 
-    toggleReceivedCallScreen() {    
+    toggleReceivedCallScreen(callerUsername) {    
         var screen = document.querySelector('.main-content .received-call-screen');
         screen.classList.toggle('on-screen');
         screen.classList.toggle('d-none');
-
+        //username
         document.querySelectorAll('.received-call-btn')
             .forEach(element => {
                 element.classList.toggle('visible');
