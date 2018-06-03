@@ -184,7 +184,6 @@ io.sockets.on('connection', function(socket) {
     //TODO: IF NO USER, EMIT USERDISCONNECTED
     console.log('The call from ' + user.username + ' was answered');
     socket.join(room);
-    
 
     //Emitimos el mensaje de que se ha cogido la llamada.
     //user.socket.emit('pickedup', room, socket.id);
@@ -222,7 +221,7 @@ io.sockets.on('connection', function(socket) {
     //Removing the user that sent the disconnected message from the online users list.
     for (let user of users) {
       if (user.socket.id === this.id) {
-        //io.sockets.in(room).emit('userdisconnected');
+        io.sockets.in(room).emit('userdisconnected');
         users.splice(index, 1);
         console.log('[USER DISCONNECT]: Online users (' + users.length + ')');
         return;

@@ -46,8 +46,13 @@ export class ChatComponent implements OnInit{
     }
 
     onHangUp(e) {
-        hangup();
-        this.toggleCallScreen();
+        if (isStarted) {            
+            hangup();
+            this.toggleCallScreen();
+        } else {
+            cancelCall();
+            this.toggleCallScreen();
+        }
     }
 
     onMute(e) {
@@ -97,11 +102,6 @@ export class ChatComponent implements OnInit{
     onCallReject() {
         this.toggleReceivedCallScreen();
         rejectCall();
-    }
-
-    onCancelCall() {
-        cancelCall();
-        this.toggleCallScreen();
     }
 
     isAuthenticated() {

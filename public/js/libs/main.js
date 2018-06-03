@@ -76,10 +76,7 @@
 //
   //Una vez nos llaman podemos pulsar el botón de coger la llamada
   function pickUp() {
-    alert('en pickup');
     getUserMedia(constraints, handleUserMedia, handleUserMediaError);
-    console.log('picking up before i accepted the user media LMAOXDDDDD');
-    socket.emit('pickup', room, callerId);
   }
 
   function rejectCall() {
@@ -124,11 +121,11 @@
     socket.on('called', function(serverRoom, serverCallerId) {
       isInitiator = false;
       room = serverRoom;
-      callerId = serverCallerId;
+      callerId = serverCallerId;      
+      onToggleReceivedCallScreenCallback();
 
       //Executing callback function from chat component.
       //TODO: Pasar username
-      onToggleReceivedCallScreenCallback();
     });  
 
     //Una vez el otro usuario ha cogido la llamada
@@ -152,6 +149,7 @@
     socket.on('ready', function(room) {
       //Establecemos la variable isChannelReady como erdadera porque ya está listo para la comunicación
       isChannelReady = true;
+      maybeStart();
 
       //Obtenemos el stream de datos para la conferencia.
     });  
@@ -166,7 +164,6 @@
   
       if (message === 'got user media') {
         // alert('Got user media, executing maybestart');
-        maybeStart();
       } else if (message.type === 'offer') {
         if (!isInitiator && !isStarted) {
           // alert('Got an offer, executing maybestart');
@@ -226,11 +223,11 @@
     }
 
     localStream = stream;
-    sendMessage('got user media');
     if (isInitiator) {
       //Once we've got the user media, we can call the other user.
       socket.emit('call', calleeUsername);
-      maybeStart();
+    } else {      
+      socket.emit('pickup', room, callerId);
     }
   }
 
