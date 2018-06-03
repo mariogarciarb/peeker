@@ -35,7 +35,7 @@
     audio: true
   };
 
-  var room = "" , callerId;
+  var room, callerId;
   // Could prompt for room name:
   // room = prompt('Enter room name:');
 
@@ -65,7 +65,7 @@
 
   function sendMessage(message) {
     console.log('Client sending message: ', message);
-    socket.emit('message', room, message);
+    socket.emit('message', message);
   }
 
   function call(newCalleeUsername) {
@@ -260,7 +260,7 @@
       console.log('Created RTCPeerConnnection');
     } catch (e) {
       
-      sendMessage(room, 'Failed to create PeerConnection, exception: ' + e.message);
+      sendMessage('Failed to create PeerConnection, exception: ' + e.message);
       console.log('Failed to create PeerConnection, exception: ' + e.message);
 
       alert('Cannot create RTCPeerConnection object.');
@@ -271,7 +271,7 @@
   function handleIceCandidate(event) {
     console.log('icecandidate event: ', event);
     if (event.candidate) {
-      sendMessage(room, {
+      sendMessage({
         type: 'candidate',
         label: event.candidate.sdpMLineIndex,
         id: event.candidate.sdpMid,
@@ -313,7 +313,7 @@
     sessionDescription.sdp = preferOpus(sessionDescription.sdp);
     pc.setLocalDescription(sessionDescription);
     console.log('setLocalAndSendMessage sending message', sessionDescription);
-    sendMessage(room, sessionDescription);
+    sendMessage(sessionDescription);
   }
 
   function onAnswerFailure() {
@@ -356,7 +356,7 @@
   function hangup() {
     console.log('Hanging up.');
     stop();
-    sendMessage(room, 'bye');
+    sendMessage('bye');
   }
 
   function handleRemoteHangup() {
