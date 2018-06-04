@@ -72,9 +72,15 @@ export class ChatComponent implements OnInit{
     }
 
     toggleCallScreen() {
-        var screen = document.querySelector('.main-content .on-call-screen');
+        var screen, contactsList;
+
+        screen = document.querySelector('.main-content .on-call-screen');
         screen.classList.toggle('on-screen');
         screen.classList.toggle('d-none');
+
+        contactsList = document.querySelector('.main-content .contacts-list');
+        contactsList.classList.toggle('d-none');
+        contactsList.classList.toggle('d-md-block');
 
         document.querySelectorAll('.on-call-btn')
             .forEach(element => {

@@ -21,6 +21,9 @@
     height: 8rem;
     width: auto;
     align-self: flex-end;
+    position: absolute;
+    right: 0;
+    bottom: 0;
 }
 
 .remoteVideo {
@@ -40,6 +43,5 @@
         
     }
     .localVideo {
-        
     }
-  } */
+  }  */
