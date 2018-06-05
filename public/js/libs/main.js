@@ -59,8 +59,6 @@
 
     //Telling the server who the user is
     socket.emit('presentation', username);
-    // document.querySelector('.btn.call').addEventListener('click', call);
-    // document.querySelector('.btn.pickup').addEventListener('click', pickUp);
   }
 
   function sendMessage(message) {
