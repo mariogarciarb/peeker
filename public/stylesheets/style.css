@@ -68,6 +68,10 @@ Classes BEM
   background-position: center;
 }
 
+.bg-main {
+  position: relative;
+  z-index: 1; 
+}
 .logo__img--white {    
   background-image: url("/img/logo/peeker-white-med.png");
 }
@@ -177,3 +181,44 @@ app-authentication {
   margin: 4rem 0 4rem 0;
 }
 
+/*
+  Call global styles
+*/
+
+.on-screen {
+  background-color: rgb(80, 80, 255);
+  height: 100%;
+  max-width: 100%;    
+}
+
+.on-call-btn,.received-call-btn {
+  visibility: hidden;    
+  border-radius: 50%;
+  width: 4rem;
+  height: 4rem;  
+  color: white;
+}
+
+.call-phone {
+  transform: rotate(90deg);
+}
+
+.hangup-phone {
+  transform: rotate(225deg);
+}
+
+.hangup-btn {
+  background-color: #bb0000;
+}
+
+.on-call-btn:hover,.received-call-btn:hover,.on-call-btn.active-btn,.received-call-btn.active-btn {
+  background-color: white;
+}
+
+.mute-btn:hover,.pause-btn:hover,.pickup-btn:hover,.pickup-btn.active-btn,.mute-btn.active-btn,.pause-btn.active-btn {
+  color: #1b998B;
+}
+
+.hangup-btn:hover,.hangup-btn.active-btn {
+  color: #bb0000;
+}

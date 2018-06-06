@@ -1,5 +1,5 @@
 
-<div class="col-12 container-fluid contacts-container py-3 bg-white">
+<div class="col-12 h-100 container-fluid contacts-container py-3 bg-white">
     <div class="row justify-content-center align-items-center">
         <h1 class="col-12">Contacts</h1>
     </div>
@@ -13,7 +13,7 @@
                     <small>{{ contact.firstName }} {{ contact.secondName }}</small>
                 </div>
                 <div class="actions col-3">
-                    <a (click)="onCall($event)" class="btn call" [attr.data-username]="contact.username">Call</a>
+                    <button (click)="onCallContact($event)" class="btn call" [attr.data-username]="contact.username"><i class="fas fa-phone call-phone"></i></button>
                 </div>
             </li>
         </ul>

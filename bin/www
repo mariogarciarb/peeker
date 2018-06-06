@@ -102,13 +102,17 @@ var users = [];
 console.log('Server listening on port ' + port);
 
 io.sockets.on('connection', function(socket) {
-  console.log('Users online: ' + users.length);
   function log() {
     var array = ['Message from server:'];
     array.push.apply(array, arguments);
     socket.emit('log', array);
   }
 
+  /**
+   *
+   *    
+   *  FOR PRODUCTION EMIT SHOULD BE ROOM ONLY:  io.sockets.in(room).emit(...)
+   */
   socket.on('message', function(message) {
     log('Client said: ', message);
     // Broadcast for every user
@@ -118,98 +122,122 @@ io.sockets.on('connection', function(socket) {
     //socket.emit('message', message);
   });
 
+
+
+  /**
+   * On user presentation.
+   * When user connects to the app, he presents itself to
+   * get stored in the current online user's list of the server.
+   */
   socket.on('presentation', function(username) {
-    var index = 0;
-    var user = {
-      username: username,
-      socket: socket
-    };
+    var user  = { username: username, socket: socket };
     
     console.log('User ' + username + ' connected.');
-
-    /********************
-     * TODO: Verificar que no esté o en el on disconnect eliminar del array
-     * ********************/
-    
-    //Añadimos el usuario a la lista global de usuarios.
-    for (let userIterated of users) {
-      if (userIterated.username === username) {
-        
-      console.log('User ' + username + ' is already in the list. Reassigning...')
-        users[index] = user;
-        return;
-      }
-
-      index++;
-    }
-
-    console.log('Adding user ' + username + ' to the list.')
     users.push(user);
   });
 
-//La id solo estará disponible cuando el otro usuario esté conectado,
-//puesto que se basa en los usuarios/sockets previamente conectados.
-//Esto está bien porque sólo podremos hablar con los usuarios conectados. (A tener en cuenta).
 
-//El usuario del socket está llamando al usuario con el nombre recibido por parámetro (calledName)
 
-  socket.on('call', function (calledName) {
-   // log('Received request to pick up ');
-    console.log("Calling... Number of users: " + users.length);
+  /**
+   * La id solo estará disponible cuando el otro usuario esté conectado,
+   * puesto que se basa en los usuarios/sockets previamente conectados.
+   * Esto está bien porque sólo podremos hablar con los usuarios conectados. (A tener en cuenta).
+   * El usuario del socket está llamando al usuario con el nombre recibido por parámetro (calledName)
+   */
+  socket.on('call', function (calledName, username) {
     //Buscamos en la lista de usuarios el primer usuario con ese nombre (deben ser únicos)
-    var foundUsers = users.filter(user => user.username === calledName);
-    if (!foundUsers.length) {
-      let strMsg = 'The user you\'re trying to call is disconnected';
-      socket.emit('userdisconnected', calledName, strMsg);
+    var user = findUserByName(calledName),
+        room;
+
+    if (!user) {
+      socket.emit('userdisconnected', calledName, 'The user you\'re trying to call is disconnected');
       return;
     }
-
-    var user = foundUsers[0];
 
     //Establecemos el string de la habitación concatenando la id del socket called con la del caller
-    var room =  user.socket.id + "" + socket.id;
+    room =  user.socket.id + "" + socket.id;
     console.log('User with ID:' + socket.id + ' is calling ' + calledName + '(' + user.socket.id + ')');
     
+    //Introducimos al usuario en la habitación creada para el chat entre los usuarios.
     socket.join(room);
-    //Notificamos al usuario called de que se le está llamando
+
+    //Notificamos al usuario que ha llamado de que se está llamando al usuario
     socket.emit('calling' , room, socket.id);
-    user.socket.emit('called' , room, socket.id);
+
+    //Notificamos al otro usuario de que se le está llamando
+    user.socket.emit('called' , room, socket.id, username);
   });
 
-  //Una vez el usuario ha sido llamado y lo ha cogido se une a la habitación en cuestión
+
+
+  /**
+   * Una vez el usuario ha sido llamado y lo ha cogido se une a la habitación en cuestión
+   */
   socket.on('pickup', function (room, callerId) {
-    var user = users.filter(user => user.socket.id === callerId)[0];
-    if (!user) {
+    var user = findUserById(callerId);
+    
+    //If user is disconnected, nothing to pick up
+    if (!user) {      
+      socket.emit('userdisconnected', callerId, 'The user you\'re trying to call is disconnected');
       return;
     }
-    //TODO: IF NO USER, EMIT USERDISCONNECTED
-    console.log('The call from ' + user.username + ' was answered');
-    socket.join(room);
-    
 
-    //Emitimos el mensaje de que se ha cogido la llamada.
-    //user.socket.emit('pickedup', room, socket.id);
-    log('Client ID ' + socket.id + ' picked up the phone ' + room);
+    //Joining the room where the calling user is
+    socket.join(room);
+
+    //Notifying all participants in the room that the communication is ready to be established
     io.sockets.in(room).emit('ready');
   });
 
-  //On user disconnect
-  socket.on('disconnect', function (room, username, reason) {
-    var index = 0;
-    console.log('Disconnection: ' + room + ' | ' + username + ' | ' + reason);
-    //Removing the user that sent the disconnected message from the online users list.
-    for (let user of users) {
-      if (user.socket.id === this.id) {
-        //io.sockets.in(room).emit('userdisconnected');
-        console.log('Users online after disconnect: ' + users.length);
-        users.splice(index, 1);
-        return;
-      }
 
-      index++;
+
+  /**
+   * When the user reject when someone is calling
+   */
+  socket.on('rejectcall', function(callerId) {
+    var user = findUserById(callerId);
+    
+    //If user is disconnected, nothing to notify
+    if (!user) {
+      return;
     }
+    
+    user.socket.emit('rejectedcall');
+  });  
+
+
+
+  /**
+   * When the user stop calling someone
+   */
+  socket.on('cancelcall', function(calleeUsername) {
+    var user = findUserByName(calleeUsername);
+    
+    //If user is disconnected, nothing to notify
+    if (!user) {
+      return;
+    }
+    
+    user.socket.emit('canceledcall');
+  });  
+
+
+
+  /**
+   * On user disconnect
+   */
+  socket.on('disconnect', function (room, username, reason) {
+    //Removing the user that sent the disconnected message from the online users list.
+    users = deleteUserById(socket.id);
+
+    console.log('[USER DISCONNECT]: Online users (' + users.length + ')');
   });
   
+  
+
+/**
+ * On ippaddr
+ */
   socket.on('ipaddr', function() {
     var ifaces = os.networkInterfaces();
     for (var dev in ifaces) {
@@ -221,3 +249,18 @@ io.sockets.on('connection', function(socket) {
     }
   });
 });
+
+
+//Functions
+
+function findUserById(id) {
+  return users.filter(user => user.socket.id === id)[0];
+}
+
+function findUserByName(username) {
+  return users.filter(user => user.username === username)[0];
+}
+
+function deleteUserById(id) {
+  return users.filter(user => user.socket.id !== id);
+}

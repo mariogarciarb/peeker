@@ -1,6 +1,6 @@
 
   'use strict';
-
+ 
   var isChannelReady = false;
   var isInitiator = false;
   var isStarted = false;
@@ -15,9 +15,13 @@
       'url': 'stun:stun.l.google.com:19302'
     }]
   };
-  
   var username;
   var calleeUsername;
+  
+  //Callback functions
+  var onRemoteHangUpCallback;
+  var onToggleCallScreenCallback;
+  var onToggleReceivedCallScreenCallback;
   
   // Set up audio and video regardless of what devices are present.
   var sdpConstraints = {
@@ -37,17 +41,24 @@
 
   var socket;
   
-  function initClient() {
-    username = localStorage.getItem('username');
-    socket      = io.connect();
-    localVideo  = document.querySelector('#localVideo');
-    remoteVideo = document.querySelector('#remoteVideo');
+  function initClient(newToggleCallScreenCallback,
+                      newToggleReceivedCallScreenCallback) {
+    //Initializing variables                    
+    socket                               = io.connect();
+    username                             = localStorage.getItem('username');
+    localVideo                           = document.querySelector('#localVideo');
+    remoteVideo                          = document.querySelector('#remoteVideo');
 
+    //Initializing callback functions                    
+    onToggleCallScreenCallback           = newToggleCallScreenCallback;
+    onToggleReceivedCallScreenCallback   = newToggleReceivedCallScreenCallback;
+    
+    //Initializing listeners
     listen();
     console.log('Making presentation. My name is: ' + username);
+
+    //Telling the server who the user is
     socket.emit('presentation', username);
-    // document.querySelector('.btn.call').addEventListener('click', call);
-    // document.querySelector('.btn.pickup').addEventListener('click', pickUp);
   }
 
   function sendMessage(message) {
@@ -62,9 +73,32 @@
   }
 //
   //Una vez nos llaman podemos pulsar el botón de coger la llamada
-  function pickUp(e) {
+  function pickUp() {
     getUserMedia(constraints, handleUserMedia, handleUserMediaError);
-    socket.emit('pickup', room, callerId);
+  }
+
+  function rejectCall() {
+    alert('rejecting');
+    socket.emit('rejectcall', callerId);
+  }
+  
+  function cancelCall() {
+    alert('canceling');
+    socket.emit('cancelcall', calleeUsername);
+  }
+  
+  function toggleMute() {
+    var audioTracks = localStream.getAudioTracks();
+    for (let audioTrack of audioTracks) {
+      audioTrack.enabled = !audioTrack.enabled;
+    }
+  }
+
+  function togglePause() {
+    var videoTracks = localStream.getVideoTracks();
+    for (let videoTrack of videoTracks) {
+      videoTrack.enabled = !videoTrack.enabled;
+    }
   }
 
   function listen() {
@@ -76,18 +110,20 @@
     });
 
     socket.on('userdisconnected', function(calledUsername, strMessage) {
+      onToggleCallScreenCallback();      
+      hangup();
       alert(strMessage);
     });
     
     //Un usuario está llamando a este cliente, recibiendo por parámetro el string de la habitación
-    socket.on('called', function(serverRoom, serverCallerId) {
+    socket.on('called', function(serverRoom, serverCallerId, callerUsername) {
       isInitiator = false;
       room = serverRoom;
-      callerId = serverCallerId;
+      callerId = serverCallerId;      
+      onToggleReceivedCallScreenCallback(callerUsername);
 
-      if (confirm('Do you want to take the call?')) {
-        pickUp();
-      }
+      //Executing callback function from chat component.
+      //TODO: Pasar username
     });  
 
     //Una vez el otro usuario ha cogido la llamada
@@ -96,9 +132,22 @@
       isChannelReady = true;
     });  
 
+    //Una vez el otro usuario ha rechazado la llamada
+    socket.on('rejectedcall', function(room) {
+      alert('user rejected the call');
+      onToggleCallScreenCallback();
+    });  
+    
+    //Una vez el otro usuario ha rechazado la llamada
+    socket.on('canceledcall', function(room) {
+      alert('user canceled the call');
+      onToggleReceivedCallScreenCallback();
+    });  
+
     socket.on('ready', function(room) {
       //Establecemos la variable isChannelReady como erdadera porque ya está listo para la comunicación
       isChannelReady = true;
+      maybeStart();
 
       //Obtenemos el stream de datos para la conferencia.
     });  
@@ -113,7 +162,6 @@
   
       if (message === 'got user media') {
         // alert('Got user media, executing maybestart');
-        maybeStart();
       } else if (message.type === 'offer') {
         if (!isInitiator && !isStarted) {
           // alert('Got an offer, executing maybestart');
@@ -173,11 +221,11 @@
     }
 
     localStream = stream;
-    sendMessage('got user media');
     if (isInitiator) {
       //Once we've got the user media, we can call the other user.
-      socket.emit('call', calleeUsername);
-      maybeStart();
+      socket.emit('call', calleeUsername, username);
+    } else {      
+      socket.emit('pickup', room, callerId);
     }
   }
 
@@ -310,17 +358,32 @@
   }
 
   function handleRemoteHangup() {
-    console.log('Session terminated.');
+    alert('Me han colgado');
     stop();
     isInitiator = false;
+
+    //Calling the callback from the component
+    onToggleCallScreenCallback();
+
   }
 
   function stop() {
     isStarted = false;
-    // isAudioMuted = false;
-    // isVideoMuted = false;
-    pc.close();
-    pc = null;
+    if (pc) {
+      pc.close();
+      pc = null;
+    }
+    stopUserMediaStream();
+  }
+
+  function stopUserMediaStream() {
+    alert('stopping userMedia')
+    if (!localStream) {
+      return;
+    }
+
+    localStream.getTracks()
+      .forEach(mediaTrack => mediaTrack.stop());
   }
 
   // Set Opus as the default audio codec if it's present.

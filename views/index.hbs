@@ -5,12 +5,18 @@
     <title>Peeker</title>
     
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    
 
 <!-- Importing Bootstrap CSS libraries -->
     {{!-- <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous"> --}}
     <link rel="stylesheet" href="/stylesheets/bootstrap.min.css">
+
+<!-- Importing Font awesome CSS for icons -->
+    <link href="/stylesheets/fontawesome/css/fontawesome-all.min.css" rel="stylesheet">
+    
 <!-- Importing custom styles -->
     <link rel='stylesheet' href='/stylesheets/style.css'/>
+    
 
 </head>
 <body>
@@ -22,7 +28,14 @@
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.0/js/bootstrap.min.js" integrity="sha384-uefMccjFJAIv6A+rW+L4AHf99KvxDjWSu1z9VI8SKNVmz4sk7buKt/6v9KI65qnm" crossorigin="anonymous"></script> --}}
     <script src="/js/libs/jquery-3.3.1.min.js"></script>
     <script src="/js/libs/bootstrap.bundle.min.js"></script>
-   
+    
+    <script>
+        $(document).ready(
+            () => $('.main')
+            .css('height', 
+                ($(window).height() - $('nav').height())+ 'px'));
+    </script>
+
     <script src="/socket.io/socket.io.js"></script>
     <script src="/js/libs/adapter.js"></script>
     <script src="/js/libs/main.js"></script>

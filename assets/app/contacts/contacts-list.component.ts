@@ -1,4 +1,4 @@
-import { Component, OnInit, Output, Input } from '@angular/core';
+import { Component, OnInit, Output, Input, EventEmitter } from '@angular/core';
 import { ContactService } from './contact.service';
 import { User } from '../auth/user.model';
 import { Router } from '@angular/router';
@@ -16,6 +16,7 @@ export class ContactsListComponent implements OnInit{
 
     constructor(private authService: AuthService, private contactService: ContactService, private router: Router) {}
 
+    @Output() onCall = new EventEmitter<string>();
     ngOnInit() {
         if (!this.isAuthenticated()) {
             this.router.navigateByUrl('/auth');
@@ -33,13 +34,11 @@ export class ContactsListComponent implements OnInit{
                         }
                     }
             );
-
-        initClient();
     }
 
-    onCall(e) {
+    onCallContact(e) {
         var username = e.target.dataset.username;
-        call(username);
+        this.onCall.emit(username);
     }
 
     isAuthenticated() {

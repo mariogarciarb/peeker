@@ -1,13 +1,35 @@
-<section class="main-content container">
-  <div class="row no-gutters">
-      <div class="col-md-8 col-lg-9 col-xl-10 content logo__img--grayblue bg-image">
-        <div class="row align-items-end justify-content-center">
-          <video id="remoteVideo" class="remoteVideo col-lg-8" autoplay></video>
-          <video id="localVideo" class="localVideo col-lg-4" muted autoplay ></video>
+<section class="main-content container-fluid bg--glitter m-0 p-0 h-100">
+  <div class="row no-gutters w-100 h-100">
+      <app-contacts-list (onCall)="onCall($event)" class="contacts-list col-md-4 col-lg-3 col-xl-2 justify-content-end"></app-contacts-list>
+      <div class="chat-container h-100 col-md-8 col-lg-9 col-xl-10 d-flex justify-content-center align-items-center">
+        
+        <!-- On call / calling screen -->
+        <div class="d-none on-call-screen content h-100 col-12 justify-content-center align-items-center">
+          <div class="row h-100 align-items-end justify-content-center w-100">
+            <video id="remoteVideo" class="remoteVideo h-100 col-lg-8" autoplay></video>
+            <video id="localVideo" class="localVideo col-lg-4" muted autoplay ></video>
+          </div>
+
+          <div class="button-panel position-absolute d-flex flex-row align-self-end m-3 w-100 justify-content-center">
+            <div class="col-10 col-sm-8 col-lg-5 col-xl-3 d-flex justify-content-around">              
+              <button (click)="onPause($event)" class="btn on-call-btn pause-btn bg--primary"><i class="fas fa-video"></i></button>
+              <button (click)="onMute($event)" class="btn on-call-btn mute-btn bg--primary"><i class="fas fa-microphone"></i></button>
+              <button (click)="onHangUp($event)" class="btn on-call-btn hangup-btn"><i class="fas fa-phone hangup-phone"></i></button>
+            </div>
+          </div>
         </div>
+
+        <!-- On received call screen -->
+        <div class="d-none received-call-screen content h-100 col-md-8 col-lg-9 col-xl-10 justify-content-center align-items-center">
+          <div class="row h-100 align-items-end justify-content-center">
+            <button (click)="onPickUp($event)" class="btn received-call-btn pickup-btn bg--primary"><i class="fas fa-phone call-phone"></i></button>
+            <button (click)="onCallReject($event)" class="btn received-call-btn hangup-btn"><i class="fas fa-phone hangup-phone"></i></button>
+          </div>
+        </div>
+
+        <!-- Logo background image -->
+        <div class="logo__img--grayblue bg-image bg-main"></div>
       </div>
-      
-      <app-contacts-list class="col-md-4 col-lg-3 col-xl-2 justify-content-end"></app-contacts-list>
-  </div>
+    </div>
 </section>
   
