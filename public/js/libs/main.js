@@ -15,8 +15,6 @@
       'url': 'stun:stun.l.google.com:19302'
     }]
   };
-  var username;
-  var calleeUsername;
   
   //Callback functions
   var onRemoteHangUpCallback;
@@ -40,12 +38,16 @@
   // room = prompt('Enter room name:');
 
   var socket;
+  var username;
+  var calleeUsername;
+  
   
   function initClient(newToggleCallScreenCallback,
                       newToggleReceivedCallScreenCallback) {
     //Initializing variables                    
     socket                               = io.connect();
     username                             = localStorage.getItem('username');
+    
     localVideo                           = document.querySelector('#localVideo');
     remoteVideo                          = document.querySelector('#remoteVideo');
 
@@ -66,24 +68,36 @@
     socket.emit('message', message);
   }
 
+  /**
+   * Función que establece el valor de iniciador de llamada a verdadero,
+   * establece el valor de la variable asociada al nombre del usuario
+   * al que se está llamando con el valor recibido por parámetro y 
+   * solicita los permisos de obtención del flujo de datos de la 
+   * cámara y del micrófono.
+   * @param {*} newCalleeUsername 
+   */
   function call(newCalleeUsername) {
     isInitiator = true;
     calleeUsername = newCalleeUsername;
     getUserMedia(constraints, handleUserMedia, handleUserMediaError);
   }
-//
+
   //Una vez nos llaman podemos pulsar el botón de coger la llamada
   function pickUp() {
     getUserMedia(constraints, handleUserMedia, handleUserMediaError);
   }
 
+  /**
+   * Función que envía un mensaje al servidor de rechazo de llamada
+   */
   function rejectCall() {
-    alert('rejecting');
     socket.emit('rejectcall', callerId);
   }
   
+  /**
+   * Función que envía un mensaje al servidor de cancelación de llamada
+   */
   function cancelCall() {
-    alert('canceling');
     socket.emit('cancelcall', calleeUsername);
   }
   
@@ -119,11 +133,10 @@
     socket.on('called', function(serverRoom, serverCallerId, callerUsername) {
       isInitiator = false;
       room = serverRoom;
-      callerId = serverCallerId;      
-      onToggleReceivedCallScreenCallback(callerUsername);
+      callerId = serverCallerId;
 
       //Executing callback function from chat component.
-      //TODO: Pasar username
+      onToggleReceivedCallScreenCallback(callerUsername);
     });  
 
     //Una vez el otro usuario ha cogido la llamada
@@ -134,22 +147,19 @@
 
     //Una vez el otro usuario ha rechazado la llamada
     socket.on('rejectedcall', function(room) {
-      alert('user rejected the call');
       onToggleCallScreenCallback();
     });  
     
     //Una vez el otro usuario ha rechazado la llamada
     socket.on('canceledcall', function(room) {
-      alert('user canceled the call');
       onToggleReceivedCallScreenCallback();
     });  
 
+    // Cuando el servidor es notificado de que el usuario llamado ha cogido la llamada
     socket.on('ready', function(room) {
-      //Establecemos la variable isChannelReady como erdadera porque ya está listo para la comunicación
+      // Establecemos la variable isChannelReady como verdadera porque ya está listo para la comunicación
       isChannelReady = true;
       maybeStart();
-
-      //Obtenemos el stream de datos para la conferencia.
     });  
 
     socket.on('log', function(array) {
@@ -235,13 +245,15 @@
   
 
   function maybeStart() {
-    console.log('>>>>>>> maybeStart(): isStarted->' + isStarted + ', localStream->' + localStream + ', isChannelReady->' + isChannelReady);
     if (!isStarted && typeof localStream !== 'undefined' && isChannelReady) {
-      console.log('>>>>>> creating peer connection');
+      // Creating peer connection
       createPeerConnection();
+
+      // Assigning stream
       pc.addStream(localStream);
+      
+      // Connection started
       isStarted = true;
-      console.log('isInitiator', isInitiator);
       if (isInitiator) {
         doCall();
       }
