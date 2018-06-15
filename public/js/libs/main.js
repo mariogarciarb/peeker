@@ -91,6 +91,7 @@
    * Función que envía un mensaje al servidor de rechazo de llamada
    */
   function rejectCall() {
+    stop();
     socket.emit('rejectcall', callerId);
   }
   
@@ -98,6 +99,7 @@
    * Función que envía un mensaje al servidor de cancelación de llamada
    */
   function cancelCall() {
+    stop();
     socket.emit('cancelcall', calleeUsername);
   }
   
@@ -147,6 +149,7 @@
 
     //Una vez el otro usuario ha rechazado la llamada
     socket.on('rejectedcall', function(room) {
+      stop();
       onToggleCallScreenCallback();
     });  
     
@@ -370,7 +373,6 @@
   }
 
   function handleRemoteHangup() {
-    alert('Me han colgado');
     stop();
     isInitiator = false;
 
