@@ -139,7 +139,7 @@ io.sockets.on('connection', function(socket) {
 
 
   /**
-   * La id solo estará disponible cuando el otro usuario esté conectado,
+   * La id sólo estará disponible cuando el otro usuario esté conectado,
    * puesto que se basa en los usuarios/sockets previamente conectados.
    * Esto está bien porque sólo podremos hablar con los usuarios conectados. (A tener en cuenta).
    * El usuario del socket está llamando al usuario con el nombre recibido por parámetro (calledName)
@@ -184,7 +184,7 @@ io.sockets.on('connection', function(socket) {
 
     //Joining the room where the calling user is
     socket.join(room);
-
+    
     //Notifying all participants in the room that the communication is ready to be established
     io.sockets.in(room).emit('ready');
   });

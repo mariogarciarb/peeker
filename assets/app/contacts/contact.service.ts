@@ -9,7 +9,7 @@ import { DataService } from "../data.service";
 
 @Injectable()
 export class ContactService {    
-    private contacts: User[] = [];3
+    private contacts: User[] = [];
     private fetchedUsers: User[] = [];
     private URL: string = "";
 

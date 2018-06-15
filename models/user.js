@@ -19,3 +19,4 @@ schema.plugin(mongooseUniqueValidator);
 
 //Creating the user model from the schema created.
 module.exports = mongoose.model('User', schema);
+
