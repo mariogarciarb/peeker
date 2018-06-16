@@ -30,7 +30,9 @@ export class ChatComponent implements OnInit{
         //Initializing client with callbacks
         initClient(
             this.toggleCallScreen,
-            this.toggleReceivedCallScreen);
+            this.toggleReceivedCallScreen,   
+            this.slashMicIcon,
+            this.slashPauseIcon);
 
         // $('#remoteVideo').css('height', ($(window).height() - $('nav').height())+ 'px');
     }
@@ -48,24 +50,24 @@ export class ChatComponent implements OnInit{
     onHangUp(e) {
         if (isStarted) {            
             hangup();
-            this.toggleCallScreen();
         } else {
             cancelCall();
-            this.toggleCallScreen();
         }
+        
+        this.toggleCallScreen();
     }
 
     onMute(e) {
         toggleMute();
-        this.toggleMicIcon(isMicMuted) ;
+        this.slashMicIcon(isMicMuted);
     }
 
     onPause(e) {
         togglePause();
-        this.togglePauseIcon(isVidPaused);
+        this.slashPauseIcon(isVidPaused);
     }
 
-    togglePauseIcon(isVidPaused) {
+    slashPauseIcon(isVidPaused) {
         var btnClass        = 'pause-btn',
             activeClass     = 'active-btn',
             videoSlashClass = 'fa-video-slash',
@@ -82,7 +84,7 @@ export class ChatComponent implements OnInit{
         }
     }
 
-    toggleMicIcon(isMicMuted) {
+    slashMicIcon(isMicMuted) {
         var btnClass        = 'mute-btn',
             activeClass     = 'active-btn',
             micSlashClass = 'fa-microphone-slash',
