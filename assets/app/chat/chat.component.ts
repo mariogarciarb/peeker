@@ -130,7 +130,7 @@ export class ChatComponent implements OnInit{
     }
 
     onPickUp() {
-        this.toggleReceivedCallScreen();
+        this.toggleReceivedCallScreen('username');
         this.toggleCallScreen();
         pickUp();
     }

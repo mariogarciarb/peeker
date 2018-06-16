@@ -21,8 +21,8 @@
   var onRemoteHangUpCallback;
   var onToggleCallScreenCallback;
   var onToggleReceivedCallScreenCallback;
-  var slashMicIcon;
-  var slashPauseIcon;
+  var slashMicIconCallback;
+  var slashPauseIconCallback;
   // Set up audio and video regardless of what devices are present.
   var sdpConstraints = {
     'mandatory': {
@@ -60,6 +60,7 @@
     onToggleReceivedCallScreenCallback   = newToggleReceivedCallScreenCallback;
     slashMicIconCallback                 = newSlashMicIconCallback;
     slashPauseIconCallback               = newSlashPauseIconCallback;
+    
     //Initializing listeners
     listen();
     console.log('Making presentation. My name is: ' + username);
@@ -404,7 +405,7 @@
     }
     stopUserMediaStream();
     slashMicIconCallback(false);
-    slashPauseIconCallback(false)
+    slashPauseIconCallback(false);
   }
 
   function stopUserMediaStream() {
