@@ -15,7 +15,8 @@
       'url': 'stun:stun.l.google.com:19302'
     }]
   };
-  
+  var isMicMuted = false;
+  var isVidPaused = false;
   //Callback functions
   var onRemoteHangUpCallback;
   var onToggleCallScreenCallback;
@@ -103,18 +104,26 @@
     socket.emit('cancelcall', calleeUsername);
   }
   
+  /**
+   * Function to mute mic on call
+   */
   function toggleMute() {
-    var audioTracks = localStream.getAudioTracks();
-    for (let audioTrack of audioTracks) {
-      audioTrack.enabled = !audioTrack.enabled;
-    }
+    // Setting contrary value
+    isMicMuted = !isMicMuted;
+    
+    // If isMicMuted, enabled = false.
+    localStream.getAudioTracks().map((audioTrack) => audioTrack.enabled = !isMicMuted);
   }
 
+  /**
+   * Function to pause camera on call
+   */
   function togglePause() {
-    var videoTracks = localStream.getVideoTracks();
-    for (let videoTrack of videoTracks) {
-      videoTrack.enabled = !videoTrack.enabled;
-    }
+    // Setting contrary value
+    isVidPaused = !isVidPaused;
+    
+    // If isVidPaused, enabled = false.
+    localStream.getVideoTracks().map((videoTrack) => videoTrack.enabled = !isVidPaused);
   }
 
   function listen() {
@@ -128,7 +137,6 @@
     socket.on('userdisconnected', function(calledUsername, strMessage) {
       onToggleCallScreenCallback();      
       hangup();
-      alert(strMessage);
     });
     
     //Un usuario está llamando a este cliente, recibiendo por parámetro el string de la habitación
@@ -382,7 +390,10 @@
   }
 
   function stop() {
-    isStarted = false;
+    isStarted   = false;
+    isMicMuted  = false;
+    isVidPaused = false;
+
     if (pc) {
       pc.close();
       pc = null;
@@ -391,7 +402,6 @@
   }
 
   function stopUserMediaStream() {
-    alert('stopping userMedia')
     if (!localStream) {
       return;
     }
