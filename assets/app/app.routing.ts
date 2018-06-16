@@ -8,12 +8,14 @@ import { HomeComponent } from "./home/home.component";
 import { AboutComponent } from "./about/about.component";
 
 const APP_ROUTES: Routes = [
-    { path: '', redirectTo: '/home', pathMatch: 'full' },
-    { path: 'home', component: HomeComponent },
+    { path: '', redirectTo: '/chat', pathMatch: 'full' },
     { path: 'chat', component: ChatComponent },
     { path: 'contacts', component: ContactsComponent },
     { path: 'about', component: AboutComponent },
-    { path: 'auth', component: AuthenticationComponent, children: AUTH_ROUTES}
+    { path: 'auth', component: AuthenticationComponent, children: AUTH_ROUTES},
+    
+    // Route for handling invalid URLs
+    { path: '**', redirectTo: '/chat'},
 ];
 
 export const routing = RouterModule.forRoot(APP_ROUTES);

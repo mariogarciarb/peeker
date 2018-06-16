@@ -16,7 +16,6 @@ export class HomeComponent implements OnInit{
     }
 
     isAuthenticated() {
-        console.log(localStorage.getItem('token'));
         return localStorage.getItem('token');
     }
 

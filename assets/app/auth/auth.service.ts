@@ -39,11 +39,26 @@ export class AuthService{
     }
     
     isLoggedIn() {
-        return localStorage.getItem('token') !== null;
+        return this.getToken();
     }
     
-    isSessionExpired(err: any) {
+    getToken() {        
+        return localStorage.getItem('token');
+    }
+
+    isSessionExpiredError(err: any) {
         return err.name === 'TokenExpiredError';
+    }    
+
+    isSessionExpired() {
+        const body = JSON.stringify({token: this.getToken()});
+        const headers = new Headers({
+            'Content-Type': 'application/json'
+        });
+
+        return this.http.post(this.URL + '/user/token-expiration', body, {headers: headers})
+            .map((response: Response) => response.json().expired).
+            catch((error: Response) => Observable.throw(error.json()));
     }
     getUsername() {
         return localStorage.getItem('username');

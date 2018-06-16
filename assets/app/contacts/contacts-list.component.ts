@@ -18,17 +18,17 @@ export class ContactsListComponent implements OnInit{
 
     @Output() onCall = new EventEmitter<string>();
     ngOnInit() {
-        if (!this.isAuthenticated()) {
-            this.router.navigateByUrl('/auth');
-            return;
-        }
+        // if (!this.isAuthenticated()) {
+        //     this.router.navigateByUrl('/auth');
+        //     return;
+        // }
         
         this.contactService.getContacts()
             .subscribe(
                 (contacts: User[]) => {
                     this.contacts = contacts;
                 },  (data) => { 
-                        if (this.authService.isSessionExpired(data.error)) {
+                        if (this.authService.isSessionExpiredError(data.error)) {
                             this.authService.logout();
                             this.router.navigateByUrl('/auth');
                         }

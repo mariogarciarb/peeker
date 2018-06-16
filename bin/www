@@ -130,10 +130,14 @@ io.sockets.on('connection', function(socket) {
    * get stored in the current online user's list of the server.
    */
   socket.on('presentation', function(username) {
-    var user  = { username: username, socket: socket };
-    
-    console.log('User ' + username + ' connected.');
+    if (!username) {
+      return;
+    }
+
+    var user  = { username: username, socket: socket };    
     users.push(user);
+    
+    console.log('User ' + username + ' connected. Users online: ' + users.length);
   });
 
 

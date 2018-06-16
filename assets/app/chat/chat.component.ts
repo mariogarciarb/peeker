@@ -1,6 +1,7 @@
 
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
+import { AuthService } from '../auth/auth.service';
 
 // declare module 'socket.io-client' {
 //     var e: any;
@@ -17,14 +18,15 @@ import { Router } from '@angular/router';
 })
 export class ChatComponent implements OnInit{
     
-    constructor(private router: Router) {}
+    constructor(private router: Router, private authService: AuthService) {}
 
     ngOnInit() {
-        if (!this.isAuthenticated()) {            
-            this.router.navigateByUrl('/auth');
-            return;
-        }
+        // if (!this.authService.isLoggedIn()) {            
+        //     this.router.navigateByUrl('/auth');
+        //     return;
+        // }
         
+        console.log(localStorage.getItem('username'));
         this.muteLocalVideo();
 
         //Initializing client with callbacks
@@ -138,9 +140,5 @@ export class ChatComponent implements OnInit{
     onCallReject() {
         this.toggleReceivedCallScreen();
         rejectCall();
-    }
-
-    isAuthenticated() {
-        return localStorage.getItem('token');
     }
 }

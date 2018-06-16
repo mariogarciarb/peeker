@@ -12,6 +12,7 @@ router.post('/', function (req, res, next) {
         firstName: req.body.firstName,
         secondName: req.body.secondName
     });
+
     user.save(function (err, result) {
         //If an error occurs (mostly validation) it will return a 500 error.
         if (err) {
@@ -77,4 +78,11 @@ router.post('/signin', function (req, res, next) {
     );
 });
 
+router.post('/token-expiration', function (req, res, next) {
+    jwt.verify(req.body.token, 'secret', function(tokenExpired, decoded) {        
+        res.status(200).json({
+            expired: tokenExpired
+        });
+    });
+});
 module.exports = router;
