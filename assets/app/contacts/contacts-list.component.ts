@@ -23,19 +23,39 @@ export class ContactsListComponent implements OnInit{
         //     return;
         // }
         
-        this.contactService.getContacts()
-            .subscribe(
-                (contacts: User[]) => {
-                    this.contacts = contacts;
-                },  (data) => { 
-                        if (this.authService.isSessionExpiredError(data.error)) {
-                            this.authService.logout();
-                            this.router.navigateByUrl('/auth');
-                        }
-                    }
-            );
+        this.authService.isSessionExpired()
+        .subscribe(
+            (expired: boolean) => {
+                if (expired) {
+                    this.authService.logout();
+                    this.router.navigateByUrl('/auth');
+                    return;
+                }
+
+                this.loadContacts();
+            },  (err) => {
+                
+                this.authService.logout();
+                this.router.navigateByUrl('/auth');
+                }
+        );
+
+ 
     }
 
+    loadContacts() {
+        this.contactService.getContacts()
+        .subscribe(
+            (contacts: User[]) => {
+                this.contacts = contacts;
+            },  (data) => {
+                    if (this.authService.isSessionExpiredError(data.error)) {
+                        this.authService.logout();
+                        this.router.navigateByUrl('/auth');
+                    }
+                }
+        );
+    }
     onCallContact(e) {
         var username = e.target.dataset.username;
         this.onCall.emit(username);

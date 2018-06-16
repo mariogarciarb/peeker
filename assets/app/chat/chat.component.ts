@@ -2,6 +2,7 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { AuthService } from '../auth/auth.service';
+import { DataService } from '../data.service';
 
 // declare module 'socket.io-client' {
 //     var e: any;
@@ -18,7 +19,7 @@ import { AuthService } from '../auth/auth.service';
 })
 export class ChatComponent implements OnInit{
     
-    constructor(private router: Router, private authService: AuthService) {}
+    constructor(private router: Router, private authService: AuthService, private dataService: DataService) {}
 
     ngOnInit() {
         // if (!this.authService.isLoggedIn()) {            
@@ -26,19 +27,45 @@ export class ChatComponent implements OnInit{
         //     return;
         // }
         
-        console.log(localStorage.getItem('username'));
-        this.muteLocalVideo();
+        this.authService.isSessionExpired()
+            .subscribe(
+                (expired: boolean) => {
+                    if (expired) {
+                        this.authService.logout();
+                        this.router.navigateByUrl('/auth');
+                        return;
+                    }
 
-        //Initializing client with callbacks
-        initClient(
-            this.toggleCallScreen,
-            this.toggleReceivedCallScreen,   
-            this.slashMicIcon,
-            this.slashPauseIcon);
+                    this.muteLocalVideo();
 
-        // $('#remoteVideo').css('height', ($(window).height() - $('nav').height())+ 'px');
+                    // If the chat was already initialized theres no need to do it again                    
+                    this.dataService.isChatInitialized.subscribe((isInitialized) => this.initChat(isInitialized));
+                },  (err) => {                    
+                        this.authService.logout();
+                        this.router.navigateByUrl('/auth');
+                    }
+        );
     }
 
+    initChat(isAlreadyInitialized) {
+        // If not initialized
+        if (!isAlreadyInitialized) {
+
+            // isInitialized = true
+            console.log(isAlreadyInitialized);
+            this.dataService.changeIsChatInitialized(true);
+            console.log('ha petau');
+
+            // Initializing client with callbacks
+            initClient(
+                this.toggleCallScreen,
+                this.toggleReceivedCallScreen,   
+                this.slashMicIcon,
+                this.slashPauseIcon);
+        } else {
+            console.log('NO');
+        }
+    }
     muteLocalVideo() {                
         var element = document.getElementById('localVideo');
         element.muted = "muted";

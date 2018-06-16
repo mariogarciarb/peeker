@@ -10,7 +10,7 @@ import { AboutComponent } from "./about/about.component";
 const APP_ROUTES: Routes = [
     { path: '', redirectTo: '/chat', pathMatch: 'full' },
     { path: 'chat', component: ChatComponent },
-    { path: 'contacts', component: ContactsComponent },
+    //{ path: 'contacts', component: ContactsComponent },
     { path: 'about', component: AboutComponent },
     { path: 'auth', component: AuthenticationComponent, children: AUTH_ROUTES},
     

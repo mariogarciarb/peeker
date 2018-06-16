@@ -34,7 +34,6 @@ export class ContactsComponent implements OnInit{
             username: new FormControl(null, Validators.required)
         });
 
-        initClient();
     }
 
     // @Input()

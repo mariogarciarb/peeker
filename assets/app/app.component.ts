@@ -9,7 +9,7 @@ import { Router } from '@angular/router';
 })
 export class AppComponent implements OnInit{
     constructor(private authService: AuthService, private router: Router) {}
-    ngOnInit() {        
+    ngOnInit() {
         this.authService.isSessionExpired()
         .subscribe(
             (expired: boolean) => {
