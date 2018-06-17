@@ -22,9 +22,6 @@ export class ContactsListComponent implements OnInit{
     ngOnInit() {
 
     }
-
-    loadContacts() {
-    }
     
     onCallContact(e) {
         var username = e.currentTarget.dataset.username;
@@ -34,6 +31,7 @@ export class ContactsListComponent implements OnInit{
 
     onAdd(e) {
         var index = e.currentTarget.dataset.index;
-        //this.onAddContact.emit(index);
+        console.log(index);
+        this.onAddContact.emit(index);
     }
 }

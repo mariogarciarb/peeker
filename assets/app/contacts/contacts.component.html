@@ -5,9 +5,15 @@
 <hr class="title-separator">
 <div class="col-12 container-fluid">
     <div class="row"> 
-        <app-contacts-search (onAdd)="onAddContact($event)" (textCleared)="onTextClear($event)" (textChanged)="onTextChange($event)" class="col-12"></app-contacts-search>
+        <app-contacts-search (textCleared)="onTextClear($event)" (textChanged)="onTextChange($event)" class="col-12"></app-contacts-search>
     </div>
     <div class="row">
-        <app-contacts-list [isResultsList]="isResultsList" [users]="fetchedUsers" [contacts]="contactsToShow"  (onCall)="onCall($event)" class="contacts-list col-12"></app-contacts-list>
+        <app-contacts-list 
+            [isResultsList]="isResultsList" 
+            [users]="fetchedUsers" 
+            [contacts]="contactsToShow" 
+            (onCall)="onCall($event)" 
+            (onAddContact)="onAddContact($event)" 
+            class="contacts-list col-12"></app-contacts-list>
     </div>
 </div>

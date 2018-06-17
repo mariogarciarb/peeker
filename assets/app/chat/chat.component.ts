@@ -131,8 +131,11 @@ export class ChatComponent implements OnInit{
     }
 
     toggleCallScreen() {
-        var screen, contactsList;
-
+        var screen, contactsList, contactsElement, chatContainer;
+/*
+d-none d-lg-block        app-contacts
+col-md-12               .chat-container
+*/
         screen = document.querySelector('.main-content .on-call-screen');
         screen.classList.toggle('on-screen');
         screen.classList.toggle('d-none');
@@ -141,10 +144,28 @@ export class ChatComponent implements OnInit{
         contactsList.classList.toggle('d-none');
         contactsList.classList.toggle('d-md-block');
 
+        contactsElement = document.querySelector('.app-contacts');
+        contactsElement.classList.toggle('d-none');
+        contactsElement.classList.toggle('d-lg-block');
+        
+        chatContainer = document.querySelector('.chat-container');
+        chatContainer.classList.toggle('col-md-12');
+        chatContainer.classList.toggle('d-none');
+        chatContainer.classList.toggle('d-md-flex');
+        chatContainer.classList.toggle('d-flex');
+        
+        chatContainer = document.querySelector('.bg-main');
+        chatContainer.classList.toggle('d-none');
+
         document.querySelectorAll('.on-call-btn')
             .forEach(element => {
                 element.classList.toggle('visible');
             });
+        
+    }
+
+    handleResponsiveCall() {
+        
     }
 
     toggleReceivedCallScreen(callerUsername) {    
@@ -152,6 +173,31 @@ export class ChatComponent implements OnInit{
         screen.classList.toggle('on-screen');
         screen.classList.toggle('d-none');
         //username
+         document.querySelector('.caller-username').innerHTML = callerUsername + ' is calling you';
+
+
+        var contactsElement, chatContainer;
+
+
+        contactsElement = document.querySelector('.app-contacts');
+        contactsElement.classList.toggle('d-none');
+        contactsElement.classList.toggle('d-lg-block');
+        
+        chatContainer = document.querySelector('.chat-container');
+        chatContainer.classList.toggle('col-md-12');
+        chatContainer.classList.toggle('d-none');
+        chatContainer.classList.toggle('d-md-flex');
+        chatContainer.classList.toggle('d-flex');
+        
+        chatContainer = document.querySelector('.bg-main');
+        chatContainer.classList.toggle('d-none');
+
+
+
+
+
+
+
         document.querySelectorAll('.received-call-btn')
             .forEach(element => {
                 element.classList.toggle('visible');

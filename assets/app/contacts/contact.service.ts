@@ -6,6 +6,7 @@ import { Http, Response, Headers } from "@angular/http";
 import 'rxjs/Rx';
 import { Observable } from "rxjs";
 import { DataService } from "../data.service";
+import { AuthService } from "../auth/auth.service";
 
 @Injectable()
 export class ContactService {    
@@ -13,8 +14,8 @@ export class ContactService {
     private fetchedUsers: User[] = [];
     private fetchedContacts: User[] = [];
     private URL: string = "";
-
-    constructor(private http: Http, private data: DataService) {
+    private currentUsername = this.authService.getUsername();
+    constructor(private http: Http, private data: DataService, private authService: AuthService) {
         //Setting the URL by the service that contains global data updated.
         this.data.URL.subscribe(currentURL => this.URL = currentURL);
     }
@@ -22,8 +23,16 @@ export class ContactService {
     addContact(index: number) {
         const token = this.getToken();
         var user = this.fetchedUsers[index];
+
+        //Adding user to the contacts list
         this.contacts.push(user);
-        
+
+        // Adding user to the current contact results list
+        this.fetchedContacts.push(user);
+
+        // Removing user from the current user result list
+        this.fetchedUsers.splice(index, 1);
+
         const body = JSON.stringify(user);        
         const headers = new Headers({
             'Content-Type': 'application/json'
@@ -33,6 +42,18 @@ export class ContactService {
             .map((response: Response) => response.json().res).
             catch((error: Response) => Observable.throw(error.json()));
 
+    }
+    
+    getContactsList() {
+        return this.contacts;
+    } 
+
+    getFetchedContactsList() {
+        return this.fetchedContacts;
+    }
+    
+    getUsersList() {
+        return this.fetchedUsers;
     }
 
     getContacts() {
@@ -73,7 +94,9 @@ export class ContactService {
 
                 //MongoDB stores users with some attributes that don't match the client User model.
                 for (let user of users) {
-                    transformedUsers.push(new User("", "", user.username, user.firstName, user.secondName));
+                    if (user.username !== this.currentUsername) {
+                        transformedUsers.push(new User("", "", user.username, user.firstName, user.secondName));
+                    }
                 }
                 
                 // Getting all users that are in the contacts list

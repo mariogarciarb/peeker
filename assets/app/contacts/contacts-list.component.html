@@ -12,7 +12,7 @@
                 <div class="actions col-3">
                         <!-- Call button only available on contacts list-->
                         <button (click)="onCallContact($event)"
-                                class="btn call bg-none color--primary"
+                                class="btn call bg-none color--primary no-select"
                                 [attr.data-username]="contact.username">
                                     <i class="fas fa-phone call-phone color--primary"></i>
                         </button>
@@ -27,15 +27,15 @@
                 <div class="actions col-3">                        
                         <!-- Add button only available on results list-->
                         <button (click)="onAdd($event)"
-                                class="btn call bg-none" 
+                                class="btn call bg-none no-select" 
                                 [attr.data-index]="i">
                                     <i class="fas fa-user-plus color--primary"></i>
                         </button>
                 </div>
             </li>
             
-            <div [hidden]="(!users || !users.length) && (!contacts || !contacts.length)" class="info col-12">
-                <span>No records found.</span>
+            <div *ngIf="!users.length && !contacts.length" class="info col-12">
+                <span>No users found.</span>
             </div>
         </ul>
     </div>

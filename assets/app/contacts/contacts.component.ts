@@ -12,7 +12,7 @@ import { AuthService } from '../auth/auth.service';
 })
 export class ContactsComponent implements OnInit{
     public contacts: User[] = [];
-    public : User[] = [];
+    public fetchedUsers: User[] = [];
     public contactsToShow: User[] = [];
     public isResultsList: boolean = false;
 
@@ -57,10 +57,13 @@ export class ContactsComponent implements OnInit{
     }
 
     onAddContact(index) {
-        this.contactService.addContact(index);
+        this.contactService.addContact(index)
         .subscribe(
             (added: boolean) => {
                 console.log(added);
+                this.contacts = this.contactService.getContactsList();
+                this.contactsToShow = this.contactService.getFetchedContactsList();
+                this.fetchedUsers   = this.contactService.getUsersList();
             }
         );
     }

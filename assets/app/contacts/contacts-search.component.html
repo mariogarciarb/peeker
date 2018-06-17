@@ -1,10 +1,10 @@
 
-<form [formGroup]="form" (ngSubmit)="onSubmit($event)">
-    <div class="form-group w-75">
+<form [formGroup]="form" (ngSubmit)="onSubmit($event)" class="container">
+    <div class="form-group row justify-content-center">
         <input type="text"
             (keyup)="onTextChanged($event)" 
             id="username"
-            class="form-control"
+            class="form-control col-9 mx-auto"
             formControlName="username"
             placeholder="Search users">
     </div> 

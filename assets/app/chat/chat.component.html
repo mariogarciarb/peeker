@@ -2,12 +2,12 @@
   <div class="row no-gutters w-100 h-100">
       <!-- <app-contacts-list (onCall)="onCall($event)" class="contacts-list col-md-4 col-lg-3 col-xl-2 justify-content-end"></app-contacts-list> -->
       <app-contacts (onCallEvent)="onCall($event)" class="app-contacts h-100 mx-auto col-sm-10 col-md-5 col-lg-4 col-xl-3"></app-contacts>
-      <div class="chat-container h-100 col-md-7 col-lg-8 col-xl-9 d-flex justify-content-center align-items-center">
+      <div class="chat-container h-100 col-md-7 col-lg-8 col-xl-9 justify-content-center align-items-center d-none d-md-flex">
         
         <!-- On call / calling screen -->
         <div class="d-none on-call-screen content h-100 col-12 justify-content-center align-items-center">
           <div class="row h-100 align-items-end justify-content-center w-100">
-            <video id="remoteVideo" class="remoteVideo h-100 col-lg-8" autoplay></video>
+            <video id="remoteVideo" class="remoteVideo h-100 col-12" autoplay></video>
             <video id="localVideo" class="localVideo col-lg-4" muted autoplay ></video>
           </div>
 
@@ -21,9 +21,14 @@
         </div>
 
         <!-- On received call screen -->
-        <div class="d-none received-call-screen content h-100 col-md-8 col-lg-9 col-xl-10 justify-content-center align-items-center">
-          <div class="row h-100 align-items-end justify-content-center">
-            <button (click)="onPickUp($event)" class="btn received-call-btn pickup-btn bg--primary"><i class="fas fa-phone call-phone"></i></button>
+        <div class="d-none received-call-screen content h-100 col-12 justify-content-center align-items-center">
+          <div class="row">
+            <div class="col-12">
+              <h3 class="caller-username text-white"></h3>
+            </div>
+          </div>
+          <div class="row h-100 align-items-end justify-content-center position-absolute">
+            <button (click)="onPickUp($event)" class="btn received-call-btn pickup-btn bg--primary mx-3"><i class="fas fa-phone call-phone"></i></button>
             <button (click)="onCallReject($event)" class="btn received-call-btn hangup-btn"><i class="fas fa-phone hangup-phone"></i></button>
           </div>
         </div>
