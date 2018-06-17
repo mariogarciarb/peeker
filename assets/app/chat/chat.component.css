@@ -34,6 +34,9 @@
 .bg-main {
     position: absolute;
 }
+.app-contacts {
+    background-color: white;
+}
 
   /*
     Media queries

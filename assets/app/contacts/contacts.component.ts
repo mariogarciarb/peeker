@@ -4,6 +4,7 @@ import { User } from '../auth/user.model';
 import { FormGroup, FormControl, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import { EventEmitter } from 'events';
+import { AuthService } from '../auth/auth.service';
 
 @Component({
     selector: 'app-contacts',
@@ -11,62 +12,75 @@ import { EventEmitter } from 'events';
     styleUrls: ['./contacts.component.css']
 })
 export class ContactsComponent implements OnInit{
-    contacts: User[];
-    users: User[];
-    form: FormGroup;
+    public contacts: User[];
+    public fetchedUsers: User[];
+    public usersToShow: User[] = [];
+    public isResultsList: boolean = false;
 
-    constructor(private contactService: ContactService, private router: Router) {}
+    constructor(private contactService: ContactService, private router: Router, private authService: AuthService) {}
     ngOnInit() {
-        if (!this.isAuthenticated()) {            
-            this.router.navigateByUrl('/auth');
-            return;
-        }
-        
-        this.contactService.getContacts()
-            .subscribe(
-                (contacts: User[]) => {
-                    this.contacts = contacts;
-                    console.log(contacts);
+        this.authService.isSessionExpired()
+        .subscribe(
+            (expired: boolean) => {
+                if (expired) {
+                    this.authService.logout();
+                    this.router.navigateByUrl('/auth');
+                    return;
                 }
-            );
-        
-        this.form = new FormGroup({
-            username: new FormControl(null, Validators.required)
-        });
 
+                this.loadContacts();
+            },  (err) => {
+                
+                this.authService.logout();
+                this.router.navigateByUrl('/auth');
+                }
+        );
     }
 
-    // @Input()
-    // set ready(isReady: boolean) {
-    //   if (isReady) someCallbackMethod();
-    // }
-    
-    onCall(e) {
-        var username = e.target.dataset.username;
+    loadContacts() {        
+        this.contactService.getContacts()
+        .subscribe(
+            (contacts: User[]) => {
+                this.contacts = contacts;
+                this.usersToShow = this.contacts;
+            },  (data) => {
+                    if (this.authService.isSessionExpiredError(data.error)) {
+                        this.authService.logout();
+                        this.router.navigateByUrl('/auth');
+                    }
+                }
+        );
+    }
+    onCall(username) {
         call(username);
     }
-    
-    onSubmit() {        
-        this.contactService.searchContacts(this.form.value.username)
-            .subscribe(
-                (users: User[]) => {
-                    this.users = users;
-                }
-            );
-    }
 
-    onAddContact(e) {
-        var index = parseInt(e.target.dataset.index);
-        this.contactService.addContact(index)
+    onAddContact(index) {
+        this.contactService.addContact(index);
         .subscribe(
             (added: boolean) => {
                 console.log(added);
             }
         );
     }
+    onTextClear(e) {
+        this.usersToShow = this.contacts;
+        this.isResultsList = false;
+    }
 
-    isAuthenticated() {
-        console.log(localStorage.getItem('token'));
-        return localStorage.getItem('token');
+    onTextChange(strUser) {
+        this.search(strUser);
+    }
+
+    search(strUser) {
+        this.contactService.searchContacts(strUser)
+            .subscribe(
+                (users: User[]) => {
+                    console.log(users);
+                    this.isResultsList = true;
+                    this.fetchedUsers = users;
+                    this.usersToShow = users;
+                }
+            );
     }
 }

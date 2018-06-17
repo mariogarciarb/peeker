@@ -1,7 +1,13 @@
-<h1>Contacts</h1>
-<div class="col-md-8 col-md-offset-2 container-fluid">
+<h2 class="text-center my-2">    
+    <i class="fas fa-users w-100"></i>
+    Contacts
+</h2>
+<hr class="title-separator">
+<div class="col-12 container-fluid">
+    <div class="row"> 
+        <app-contacts-search (onAdd)="onAddContact($event)" (textCleared)="onTextClear($event)" (textChanged)="onTextChange($event)" class="col-12"></app-contacts-search>
+    </div>
     <div class="row">
-        
-    <app-contacts-list></app-contacts-list>
+        <app-contacts-list [isResultsList]="isResultsList" [users]="usersToShow" [currentContacts]="contacts" class="contacts-list col-12"></app-contacts-list>
     </div>
 </div>

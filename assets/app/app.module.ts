@@ -24,12 +24,14 @@ import { ResultsListComponent } from './contacts/results-list.component';
 import { DataService } from './data.service';
 import { AboutComponent } from './about/about.component';
 import { UserMenuComponent } from './auth/user-menu.component';
+import { ContactsSearchComponent } from './contacts/contacts-search.component';
 
 @NgModule({
     declarations: [
         AppComponent,
         ContactsComponent,
         ContactsListComponent,
+        ContactsSearchComponent,
         ResultsListComponent,
         ChatComponent,
         UserMenuComponent,

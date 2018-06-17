@@ -11,57 +11,44 @@ import { AuthService } from '../auth/auth.service';
 })
 
 export class ContactsListComponent implements OnInit{
-    contacts: User[];
-    users: User[];
-
     constructor(private authService: AuthService, private contactService: ContactService, private router: Router) {}
 
+    @Input() isResultsList: boolean;
+    @Input() users: User[] = [];
+    @Input() currentContacts: User[] = [];
     @Output() onCall = new EventEmitter<string>();
+    @Output() onAddContact = new EventEmitter<number>();
+
     ngOnInit() {
-        // if (!this.isAuthenticated()) {
-        //     this.router.navigateByUrl('/auth');
-        //     return;
-        // }
-        
-        this.authService.isSessionExpired()
-        .subscribe(
-            (expired: boolean) => {
-                if (expired) {
-                    this.authService.logout();
-                    this.router.navigateByUrl('/auth');
-                    return;
-                }
 
-                this.loadContacts();
-            },  (err) => {
-                
-                this.authService.logout();
-                this.router.navigateByUrl('/auth');
-                }
-        );
-
- 
     }
 
     loadContacts() {
-        this.contactService.getContacts()
-        .subscribe(
-            (contacts: User[]) => {
-                this.contacts = contacts;
-            },  (data) => {
-                    if (this.authService.isSessionExpiredError(data.error)) {
-                        this.authService.logout();
-                        this.router.navigateByUrl('/auth');
-                    }
-                }
-        );
+        // this.contactService.getContacts()
+        // .subscribe(
+        //     (contacts: User[]) => {
+        //         this.contacts = contacts;
+        //     },  (data) => {
+        //             if (this.authService.isSessionExpiredError(data.error)) {
+        //                 this.authService.logout();
+        //                 this.router.navigateByUrl('/auth');
+        //             }
+        //         }
+        // );
     }
+    
     onCallContact(e) {
-        var username = e.target.dataset.username;
-        this.onCall.emit(username);
+        var username = e.currentTarget.dataset.username;
+        // this.onCall.emit(username);
+        
+        console.log("flepas", this.currentContacts);
     }
 
-    isAuthenticated() {
-        return localStorage.getItem('token');
+    onAdd(e) {
+        var index = e.currentTarget.dataset.index;
+        this.onAddContact.emit(index);
+    }
+    isContact(user) {
+        return this.currentContacts.filter((iteratedUser) => iteratedUser.username === user.username)[0];
     }
 }

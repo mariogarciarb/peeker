@@ -72,9 +72,8 @@ export class ContactService {
 
                 //MongoDB stores users with some attributes that don't match the client User model.
                 for (let user of users) {
-                    transformedUsers.push(new User("", "", user.username, user.firstName, user.secondName))
+                    transformedUsers.push(new User("", "", user.username, user.firstName, user.secondName));
                 }
-
                 this.fetchedUsers = transformedUsers;
                 return transformedUsers;
             }).

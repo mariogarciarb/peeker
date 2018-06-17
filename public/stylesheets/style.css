@@ -222,3 +222,7 @@ app-authentication {
 .hangup-btn:hover,.hangup-btn.active-btn {
   color: #bb0000;
 }
+
+.bg-none {
+  background: none;
+}
