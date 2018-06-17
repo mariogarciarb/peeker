@@ -57,18 +57,46 @@ export class ChatComponent implements OnInit{
 
     onMute(e) {
         toggleMute();
-        var muteIcon = document.querySelector('.mute-btn i');
-        e.target.classList.toggle('active-btn');
-        muteIcon.classList.toggle('fa-microphone');
-        muteIcon.classList.toggle('fa-microphone-slash');
+        this.toggleMicIcon(isMicMuted) ;
     }
 
     onPause(e) {
         togglePause();
-        var muteIcon = document.querySelector('.pause-btn i');
-        e.target.classList.toggle('active-btn');
-        muteIcon.classList.toggle('fa-video');
-        muteIcon.classList.toggle('fa-video-slash');
+        this.togglePauseIcon(isVidPaused);
+    }
+
+    togglePauseIcon(isVidPaused) {
+        var btnClass        = 'pause-btn',
+            activeClass     = 'active-btn',
+            videoSlashClass = 'fa-video-slash',
+            videoClass      = 'fa-video',
+            muteBtn         = document.querySelector('.' + btnClass),
+            muteIcon        = document.querySelector('.' + btnClass + ' i');
+            
+        if (isVidPaused) { //If paused, remove pause icon and active class
+            muteBtn.classList.add(activeClass);
+            muteIcon.classList.replace(videoClass, videoSlashClass);
+        } else { // If not, add pause icon and active class
+            muteBtn.classList.remove(activeClass);
+            muteIcon.classList.replace(videoSlashClass, videoClass);
+        }
+    }
+
+    toggleMicIcon(isMicMuted) {
+        var btnClass        = 'mute-btn',
+            activeClass     = 'active-btn',
+            micSlashClass = 'fa-microphone-slash',
+            micClass      = 'fa-microphone',
+            muteBtn         = document.querySelector('.' + btnClass),
+            muteIcon        = document.querySelector('.' + btnClass + ' i');
+            
+        if (isMicMuted) { //If paused, remove pause icon and active class
+            muteBtn.classList.add(activeClass);
+            muteIcon.classList.replace(micClass, micSlashClass);
+        } else { // If not, add pause icon and active class
+            muteBtn.classList.remove(activeClass);
+            muteIcon.classList.replace(micSlashClass, micClass);
+        }
     }
 
     toggleCallScreen() {
