@@ -4,31 +4,37 @@
     <div class="row justify-content-center align-items-center">
         <ul class="list-group offset-1 col-10">
             <li class="list-group-item d-flex flex-row align-items-center" 
+                *ngFor="let contact of contacts">
+                <div class="info col-9">
+                    <h5>{{ contact.username }}</h5>
+                    <small>{{ contact.firstName }} {{ contact.secondName }}</small>
+                </div>
+                <div class="actions col-3">
+                        <!-- Call button only available on contacts list-->
+                        <button (click)="onCallContact($event)"
+                                class="btn call bg-none color--primary"
+                                [attr.data-username]="contact.username">
+                                    <i class="fas fa-phone call-phone color--primary"></i>
+                        </button>
+                </div>
+            </li>
+            <li class="list-group-item d-flex flex-row align-items-center" 
                 *ngFor="let user of users; let i = index">
                 <div class="info col-9">
                     <h5>{{ user.username }}</h5>
                     <small>{{ user.firstName }} {{ user.secondName }}</small>
                 </div>
-                <div class="actions col-3">
-                        <!-- Call button only available on contacts list-->
-                        <button (click)="onCallContact($event)"
-                                class="btn call bg-none color--primary" 
-                                *ngIf="!isResultsList || isContact(user)" 
-                                [attr.data-username]="user.username">
-                                    <i class="fas fa-phone call-phone color--primary"></i>
-                        </button>
-                        
+                <div class="actions col-3">                        
                         <!-- Add button only available on results list-->
                         <button (click)="onAdd($event)"
                                 class="btn call bg-none" 
-                                *ngIf="isResultsList && !isContact(user)" 
                                 [attr.data-index]="i">
                                     <i class="fas fa-user-plus color--primary"></i>
                         </button>
                 </div>
             </li>
             
-            <div [hidden]="users.length" class="info col-12">
+            <div [hidden]="(!users || !users.length) && (!contacts || !contacts.length)" class="info col-12">
                 <span>No records found.</span>
             </div>
         </ul>

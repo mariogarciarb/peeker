@@ -1,9 +1,8 @@
-import { Component, OnInit, Output, Input } from '@angular/core';
+import { Component, OnInit, Output, Input, EventEmitter } from '@angular/core';
 import { ContactService } from './contact.service';
 import { User } from '../auth/user.model';
 import { FormGroup, FormControl, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
-import { EventEmitter } from 'events';
 import { AuthService } from '../auth/auth.service';
 
 @Component({
@@ -12,10 +11,12 @@ import { AuthService } from '../auth/auth.service';
     styleUrls: ['./contacts.component.css']
 })
 export class ContactsComponent implements OnInit{
-    public contacts: User[];
-    public fetchedUsers: User[];
-    public usersToShow: User[] = [];
+    public contacts: User[] = [];
+    public : User[] = [];
+    public contactsToShow: User[] = [];
     public isResultsList: boolean = false;
+
+    @Output() onCallEvent = new EventEmitter<string>();
 
     constructor(private contactService: ContactService, private router: Router, private authService: AuthService) {}
     ngOnInit() {
@@ -42,7 +43,7 @@ export class ContactsComponent implements OnInit{
         .subscribe(
             (contacts: User[]) => {
                 this.contacts = contacts;
-                this.usersToShow = this.contacts;
+                this.contactsToShow = this.contacts;
             },  (data) => {
                     if (this.authService.isSessionExpiredError(data.error)) {
                         this.authService.logout();
@@ -52,7 +53,7 @@ export class ContactsComponent implements OnInit{
         );
     }
     onCall(username) {
-        call(username);
+        this.onCallEvent.emit(username);
     }
 
     onAddContact(index) {
@@ -64,7 +65,8 @@ export class ContactsComponent implements OnInit{
         );
     }
     onTextClear(e) {
-        this.usersToShow = this.contacts;
+        this.contactsToShow = this.contacts;
+        this.fetchedUsers = [];
         this.isResultsList = false;
     }
 
@@ -75,11 +77,10 @@ export class ContactsComponent implements OnInit{
     search(strUser) {
         this.contactService.searchContacts(strUser)
             .subscribe(
-                (users: User[]) => {
-                    console.log(users);
+                (arr) => {
                     this.isResultsList = true;
-                    this.fetchedUsers = users;
-                    this.usersToShow = users;
+                    this.contactsToShow =  arr[0];                    
+                    this.fetchedUsers = arr[1];
                 }
             );
     }

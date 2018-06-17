@@ -15,7 +15,7 @@ export class ContactsListComponent implements OnInit{
 
     @Input() isResultsList: boolean;
     @Input() users: User[] = [];
-    @Input() currentContacts: User[] = [];
+    @Input() contacts: User[] = [];
     @Output() onCall = new EventEmitter<string>();
     @Output() onAddContact = new EventEmitter<number>();
 
@@ -24,31 +24,16 @@ export class ContactsListComponent implements OnInit{
     }
 
     loadContacts() {
-        // this.contactService.getContacts()
-        // .subscribe(
-        //     (contacts: User[]) => {
-        //         this.contacts = contacts;
-        //     },  (data) => {
-        //             if (this.authService.isSessionExpiredError(data.error)) {
-        //                 this.authService.logout();
-        //                 this.router.navigateByUrl('/auth');
-        //             }
-        //         }
-        // );
     }
     
     onCallContact(e) {
         var username = e.currentTarget.dataset.username;
-        // this.onCall.emit(username);
-        
-        console.log("flepas", this.currentContacts);
+    
+        this.onCall.emit(username);
     }
 
     onAdd(e) {
         var index = e.currentTarget.dataset.index;
-        this.onAddContact.emit(index);
-    }
-    isContact(user) {
-        return this.currentContacts.filter((iteratedUser) => iteratedUser.username === user.username)[0];
+        //this.onAddContact.emit(index);
     }
 }

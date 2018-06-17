@@ -11,6 +11,7 @@ import { DataService } from "../data.service";
 export class ContactService {    
     private contacts: User[] = [];
     private fetchedUsers: User[] = [];
+    private fetchedContacts: User[] = [];
     private URL: string = "";
 
     constructor(private http: Http, private data: DataService) {
@@ -74,8 +75,13 @@ export class ContactService {
                 for (let user of users) {
                     transformedUsers.push(new User("", "", user.username, user.firstName, user.secondName));
                 }
-                this.fetchedUsers = transformedUsers;
-                return transformedUsers;
+                
+                // Getting all users that are in the contacts list
+                this.fetchedContacts = transformedUsers.filter((iteratedUser) => this.isContact(iteratedUser));
+                
+                // Getting users that are not in the list of contacts that were fetched
+                this.fetchedUsers = transformedUsers.filter((iteratedUser) => !this.fetchedContacts.includes(iteratedUser));
+                return [this.fetchedContacts, this.fetchedUsers];
             }).
             catch((error: Response) => Observable.throw(error.json()));
     }
@@ -83,5 +89,9 @@ export class ContactService {
     getToken() {
         var token = localStorage.getItem('token');
         return (token) ? "?token=" + token : '';
+    }
+
+    isContact(user) {        
+        return this.contacts.find((iteratedUser) => iteratedUser.username === user.username);
     }
 }
